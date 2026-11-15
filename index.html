@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ms"><head><meta charset="utf-8"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="theme-color" content="#25262b"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1">
 <title>Pro Editor 2D</title>
-<meta name="app-version" content="1.5.0">
+<meta name="app-version" content="1.6.0">
 <style>:root{--bg:#1b1c20;--p1:#25262b;--p2:#2d2e34;--p3:#383a42;--ln:#41434c;--tx:#e8e9ee;--mu:#9a9ca8;--ac:#4c8dff;--ac2:#3a74da;--ok:#2fbf71;--no:#ef4f5f}
 *{box-sizing:border-box}html,body{height:100%;margin:0;background:var(--bg);color:var(--tx);font:13px/1.35 "Segoe UI",system-ui,Arial,sans-serif;overflow:hidden;user-select:none}
 button,select,input,textarea{font:inherit;color:inherit}
@@ -154,6 +154,8 @@ body.mob button,body.mob .sw{-webkit-tap-highlight-color:transparent;touch-actio
 body.mob *{-webkit-touch-callout:none}
 #htSw .sw.on{outline:2px solid #6c8cff}#htPick.on{background:#3b4a8a}
 .sp .ft{position:sticky;bottom:-14px;background:var(--p2);padding:10px 0 4px;margin-top:10px;z-index:3}
+
+body.mob #mMain .box{height:var(--vvh,100%);max-height:none;border-radius:0}body.mob #msStage{height:48vh!important}
 </style></head><body>
 <div id="app">
 <header id="top">
@@ -215,6 +217,12 @@ body.mob *{-webkit-touch-callout:none}
 <label class="spck"><input type="checkbox" id="spCut" checked> Buang latar foto secara automatik</label>
 <div class="ft"><button id="spCancel">Batal</button><button id="spRand">🔀 Rawak</button><button class="pri" id="spGo">Jana poster</button></div></div></div>
 <input type="file" id="spFile" accept="image/*" hidden>
+<div class="modal" id="mMain"><div class="box" style="width:min(900px,96vw)"><h3>👤 Subjek utama — kekalkan yang utama sahaja</h3>
+<div id="msStage" style="height:min(56vh,520px);border:1px solid var(--ln);border-radius:8px;position:relative;overflow:hidden;touch-action:none"><canvas id="msCv" style="width:100%;height:100%;display:block"></canvas><div id="msMsg" style="position:absolute;left:10px;top:10px;background:#000b;padding:5px 10px;border-radius:6px;font-size:12px;display:none"></div></div>
+<div class="hint" id="msInfo" style="margin:6px 0"></div>
+<div class="row"><label>Pilih</label><select id="msMode"><option value="one">1 subjek utama (paling fokus)</option><option value="big">Semua subjek besar</option></select></div>
+<div class="row"><label>Sensitiviti</label><input type="range" id="msThr" min="20" max="80" value="50"></div>
+<div class="ft"><button id="msCancel">Batal</button><button id="msAuto">↺ Pilih auto</button><button class="pri" id="msOk">Buang yang lain</button></div></div></div>
 <div class="modal" id="mHelp"><div class="box" style="width:520px;max-width:96vw"><h3>Panduan — buat flyer &amp; poster</h3>
 <div class="hl2">Gerak isyarat</div><ul class="hlp"><li><b>1 jari</b> pada objek = alih. Tarik <b>kotak sudut</b> = besar/kecil, <b>bulatan atas</b> = putar.</li><li><b>2 jari</b> = cubit untuk zum, seret untuk gerak paparan (sentiasa boleh).</li><li><b>Ketuk 2×</b> pada teks = edit tulisan.</li><li><b>Ketuk kawasan kosong</b> = nyahpilih.</li></ul>
 <div class="hl2">Resipi flyer 5 minit</div><ol class="hlp"><li><b>Baru</b> → pilih saiz (Story/TikTok 1080×1920, FB 1080×1350, atau A4 300 dpi untuk cetak).</li><li><b>Templat</b> → pilih susun atur, atau <b>Latar</b> → warna / gradien.</li><li><b>Gambar</b> → masukkan produk. <b>Buang Latar</b> → pilih kaedah.</li><li><b>Teks</b> → tulis tajuk. Di <b>Panel › Sifat</b>: fon, saiz, warna, lengkung, garis tepi, bayang.</li><li><b>Panel › Elemen</b> → bentuk, jalur harga, butang. <b>Panel › Lapisan</b> → ▲▼ untuk susun atas/bawah.</li><li><b>Muat turun</b> → PNG (jelas) atau JPG (kecil untuk FB/TikTok).</li></ol>
@@ -321,6 +329,7 @@ body.mob *{-webkit-touch-callout:none}
 <div class="modal" id="mBgm"><div class="box" style="width:560px"><h3>Buang latar belakang — pilih kaedah</h3>
   <div class="cards">
     <button class="card" id="bmSmart"><b>✨ Auto pintar</b><span>Paling mudah. Pratonton dahulu, kemudian betulkan dengan berus Simpan/Buang.</span></button>
+    <button class="card" id="bmMain"><b>👤 Subjek utama</b><span>Gambar ramai orang / tempat awam: kekalkan orang yang paling fokus &amp; utama, buang yang lain. Ketuk untuk tukar.</span></button>
     <button class="card" id="bmAi"><b>🤖 AI</b><span>Petunjuk AI + enjin warna untuk tepi tepat. <em id="bmAiN"></em></span></button>
     <button class="card" id="bmWand"><b>🪄 Tongkat ajaib</b><span>Klik kawasan yang mahu dibuang. Tiada yang terpotong kecuali yang anda klik.</span></button>
     <button class="card" id="bmColor"><b>🎨 Padam warna latar</b><span>Buang warna latar dari tepi (selamat untuk latar licin/seragam). Laras toleransi.</span></button>
@@ -750,20 +759,19 @@ const AIX = (() => {
     if (api._inject) return api._inject.status();
     if (location.protocol === 'file:') return { ort: false, srFast: false, srHq: false, bg: false };
     const [ort, srFast, srHq, bg] = await Promise.all([exists(abs(ORT_DIR + 'ort.min.js')), exists(abs(MODEL_DIR + MODELS.srFast.file)), exists(abs(MODEL_DIR + MODELS.srHq.file)), exists(abs(MODEL_DIR + MODELS.bg.file))]);
-    return { ort, srFast: ort && srFast, srHq: ort && srHq, bg: ort && bg };
+    const ortOk = ort || navigator.onLine; return { ort: ortOk, srFast: ortOk && srFast, srHq: ortOk && srHq, bg: ortOk && bg };
   }
+  const ORT_CDN = 'https://cdn.jsdelivr.net/npm/onnxruntime-web@1.17.3/dist/';
+  const loadScript = src => new Promise((res, rej) => { const s = document.createElement('script'); s.src = src; s.onload = res; s.onerror = () => { s.remove(); rej(new Error('gagal')); }; document.head.appendChild(s); });
   function loadOrt() {
     if (window.ort) return Promise.resolve(window.ort);
     if (ortP) return ortP;
-    ortP = new Promise((res, rej) => {
-      const s = document.createElement('script'); s.src = abs(ORT_DIR + 'ort.min.js');
-      s.onload = () => {
-        try { ort.env.wasm.wasmPaths = abs(ORT_DIR); ort.env.wasm.numThreads = 1; ort.env.wasm.proxy = false; } catch (e) {}
-        res(window.ort);
-      };
-      s.onerror = () => { ortP = null; rej(new Error('ort.min.js tidak dijumpai — jalankan PASANG-MODEL-AI.bat')); };
-      document.head.appendChild(s);
-    });
+    ortP = (async () => {
+      let dir = abs(ORT_DIR);
+      try { await loadScript(dir + 'ort.min.js'); } catch (e) { dir = ORT_CDN; await loadScript(dir + 'ort.min.js'); }
+      try { ort.env.wasm.wasmPaths = dir; ort.env.wasm.numThreads = 1; ort.env.wasm.proxy = false; } catch (e) {}
+      return window.ort;
+    })().catch(e => { ortP = null; throw new Error('Enjin AI (onnxruntime) tidak dapat dimuat — perlukan internet atau folder vendor/ort'); });
     return ortP;
   }
   // sesi ringkas: infer(Float32Array NCHW, h, w) -> { data, h, w }
@@ -2050,7 +2058,7 @@ $('#csPre').innerHTML = '<option value="">Saiz pantas…</option>' + SIZES.map((
 // ---- kaedah buang latar ----
 function openBgMethod(L) {
   L = L || selLayer(); if (!L || L.kind === 'shape') { toast('Pilih lapisan imej dahulu', 1); return; } BM.L = L;
-  AIX.status().then(s => { $('#bmAi').classList.toggle('off', !s.bg); $('#bmAiN').textContent = s.bg ? 'Model AI sedia (offline).' : 'Perlu PASANG-MODEL-AI (dalam .exe) / dibuka melalui http(s).'; }).catch(() => {});
+  AIX.status().then(s => { $('#bmAi').classList.toggle('off', !s.bg); $('#bmAiN').textContent = s.bg ? 'Model AI sedia (offline).' : 'Perlu fail models/u2netp.onnx (lihat panduan) dan dibuka melalui http(s).'; }).catch(() => {});
   show('mBgm');
 }
 const BM = { L: null };
@@ -2238,6 +2246,75 @@ async function spGenerate(rand) {
 }
 $('#bSmart') && ($('#bSmart').onclick = openSmart);
 
+// ===== Subjek Utama: AI (atau warna) cari objek/orang -> pilih yang utama (fokus, besar, tengah) -> buang yang lain =====
+const MSX = { L: null, w: 0, h: 0, wc: null, data: null, P: null, src: '', lab: null, comps: [], keep: new Set(), full: null, busy: false };
+const msMsg = t => { const e = $('#msMsg'); e.textContent = t || ''; e.style.display = t ? 'block' : 'none'; };
+async function aiSaliency(wc, w, h) {
+  const sess = await AIX.getSession('bg'), SZ = 320, sc = mk(SZ, SZ), sx = sc.getContext('2d'); sx.imageSmoothingQuality = 'high'; sx.drawImage(wc, 0, 0, SZ, SZ);
+  const d = sx.getImageData(0, 0, SZ, SZ).data, pl = SZ * SZ, inp = new Float32Array(3 * pl); let mx = 1; for (let i = 0; i < pl; i++) mx = Math.max(mx, d[i * 4], d[i * 4 + 1], d[i * 4 + 2]);
+  const mean = [0.485, 0.456, 0.406], sd = [0.229, 0.224, 0.225]; for (let i = 0; i < pl; i++) for (let c = 0; c < 3; c++) inp[c * pl + i] = (d[i * 4 + c] / mx - mean[c]) / sd[c];
+  const res = await sess.infer(inp, SZ, SZ), p = res.data; let lo = 1e9, hi = -1e9; for (let i = 0; i < pl; i++) { lo = Math.min(lo, p[i]); hi = Math.max(hi, p[i]); }
+  const mi = new ImageData(SZ, SZ); for (let i = 0; i < pl; i++) { const v = (p[i] - lo) / ((hi - lo) || 1) * 255; mi.data[i * 4] = mi.data[i * 4 + 1] = mi.data[i * 4 + 2] = v; mi.data[i * 4 + 3] = 255; }
+  const mc = mk(SZ, SZ); mc.getContext('2d').putImageData(mi, 0, 0); const up = mk(w, h), ux = up.getContext('2d'); ux.imageSmoothingQuality = 'high'; ux.drawImage(mc, 0, 0, w, h);
+  const ud = ux.getImageData(0, 0, w, h).data, P = new Float32Array(w * h); for (let i = 0; i < w * h; i++) P[i] = ud[i * 4] / 255; return P;
+}
+async function msOpen(L) {
+  L = L || selLayer(); if (!L || L.kind === 'shape') { toast('Pilih lapisan imej dahulu', 1); return; } MSX.L = L; show('mMain'); msMsg('Menganalisis gambar…'); $('#msInfo').textContent = ''; await tick();
+  try {
+    const c = L.cv, k = Math.min(1, 900 / Math.max(c.width, c.height)), w = Math.max(2, Math.round(c.width * k)), h = Math.max(2, Math.round(c.height * k)), wc = mk(w, h), wx = wc.getContext('2d', { willReadFrequently: true }); wx.imageSmoothingQuality = 'high'; wx.drawImage(c, 0, 0, w, h);
+    Object.assign(MSX, { w, h, wc, data: wx.getImageData(0, 0, w, h).data, full: c.getContext('2d', { willReadFrequently: true }).getImageData(0, 0, c.width, c.height) });
+    const st = await AIX.status().catch(() => ({}));
+    if (st.bg) { try { MSX.P = await aiSaliency(wc, w, h); MSX.src = 'ai'; } catch (e) { MSX.P = null; toast('AI gagal: ' + e.message + ' — guna kaedah warna', 1); } }
+    if (!MSX.P) { const r = BGXC.segment({ w, h, data: MSX.data }, { tol: 7, protect: 1, holes: 'keep' }); if (r.info.error) { msMsg(''); $('#msInfo').textContent = 'Gagal: ' + r.info.error; return; } MSX.P = Float32Array.from(r.label, v => v ? 1 : 0); MSX.src = 'warna'; }
+    msBuild(); msAuto(); msSize(); msMsg('');
+  } catch (e) { msMsg(''); toast('Gagal: ' + e.message, 1); }
+}
+function msBuild() {
+  const { w, h, P, data } = MSX, n = w * h, thr = $('#msThr').value / 100, bin = new Uint8Array(n); for (let i = 0; i < n; i++) bin[i] = P[i] > thr ? 1 : 0;
+  const cc = BGXC.components(bin, w, h), lab = cc.lab, N = cc.sizes.length, G = new Float32Array(n), lum = new Float32Array(n); for (let i = 0; i < n; i++) lum[i] = 0.299 * data[i * 4] + 0.587 * data[i * 4 + 1] + 0.114 * data[i * 4 + 2];
+  let gs = 0; for (let y = 1; y < h - 1; y++) for (let x = 1; x < w - 1; x++) { const i = y * w + x, g = Math.abs(lum[i + 1] - lum[i - 1]) + Math.abs(lum[i + w] - lum[i - w]); G[i] = g; gs += g; } const gm = gs / n + 1e-3;
+  const A = new Float64Array(N), SP = new Float64Array(N), SG = new Float64Array(N), CI = new Float64Array(N), SX = new Float64Array(N), SY = new Float64Array(N);
+  for (let y = 1; y < h - 1; y++) for (let x = 1; x < w - 1; x++) { const i = y * w + x, l = lab[i]; if (!l) continue; A[l]++; SP[l] += P[i]; SX[l] += x; SY[l] += y; if (lab[i - 1] === l && lab[i + 1] === l && lab[i - w] === l && lab[i + w] === l) { SG[l] += G[i]; CI[l]++; } }
+  const comps = []; for (let l = 1; l < N; l++) { if (A[l] < n * 0.004) continue; const share = A[l] / n, cx = SX[l] / A[l] / w, cy = SY[l] / A[l] / h, dist = Math.hypot(cx - 0.5, cy - 0.5) / 0.7071, sharp = CI[l] ? (SG[l] / CI[l]) / gm : 1, mp = SP[l] / A[l];
+    comps.push({ l, share, cx, cy, dist, sharp, mp, score: mp * Math.sqrt(share) * (1 - 0.5 * dist) * (0.6 + 0.4 * Math.min(2, sharp)) }); }
+  comps.sort((a, b) => b.score - a.score); MSX.lab = lab; MSX.comps = comps;
+}
+function msAuto() {
+  const cs = MSX.comps; MSX.keep = new Set(); if (!cs.length) { $('#msInfo').textContent = 'Tiada objek dikesan. Cuba turunkan Sensitiviti.'; msDraw(); return; }
+  if ($('#msMode').value === 'one') MSX.keep.add(cs[0].l); else cs.forEach(c => { if (c.score >= cs[0].score * 0.45 && c.share >= 0.02) MSX.keep.add(c.l); }); if (!MSX.keep.size) MSX.keep.add(cs[0].l);
+  msInfo(); msDraw();
+}
+function msInfo() { $('#msInfo').innerHTML = `Sumber: <b>${MSX.src === 'ai' ? 'AI' : 'warna (AI belum dipasang — hanya sesuai latar ringkas)'}</b> · ${MSX.comps.length} objek dikesan · dikekalkan: <b>${MSX.keep.size}</b>. <b>Ketuk</b> objek untuk kekal/buang. Hijau = kekal, merah = dibuang.`; }
+function msSize() { const st = $('#msStage'), r = st.getBoundingClientRect(), d = devicePixelRatio || 1, cv = $('#msCv'); cv.width = Math.round(r.width * d); cv.height = Math.round(r.height * d); msDraw(); }
+function msGeom() { const cv = $('#msCv'), d = devicePixelRatio || 1, W = cv.width / d, H = cv.height / d, k = Math.min((W - 16) / MSX.w, (H - 16) / MSX.h); return { d, W, H, k, ox: (W - MSX.w * k) / 2, oy: (H - MSX.h * k) / 2 }; }
+function msDraw() {
+  if (!MSX.wc || !MSX.lab) return; const cv = $('#msCv'), g = cv.getContext('2d'), G = msGeom(), { w, h, lab } = MSX; g.setTransform(1, 0, 0, 1, 0, 0); g.clearRect(0, 0, cv.width, cv.height); g.fillStyle = '#101114'; g.fillRect(0, 0, cv.width, cv.height);
+  g.setTransform(G.d, 0, 0, G.d, 0, 0); g.imageSmoothingQuality = 'high'; g.drawImage(MSX.wc, G.ox, G.oy, w * G.k, h * G.k);
+  const ov = new ImageData(w, h), od = ov.data, big = new Set(MSX.comps.map(c => c.l)); for (let i = 0; i < w * h; i++) { const l = lab[i], q = i * 4; if (l && MSX.keep.has(l)) { continue; } if (l && big.has(l)) { od[q] = 230; od[q + 1] = 40; od[q + 2] = 50; od[q + 3] = 120; } else { od[q] = 0; od[q + 1] = 0; od[q + 2] = 0; od[q + 3] = 150; } }
+  const oc = mk(w, h); oc.getContext('2d').putImageData(ov, 0, 0); g.drawImage(oc, G.ox, G.oy, w * G.k, h * G.k);
+  g.lineWidth = 2; g.strokeStyle = '#2fe08a'; for (const c of MSX.comps) if (MSX.keep.has(c.l)) { g.beginPath(); g.arc(G.ox + c.cx * w * G.k, G.oy + c.cy * h * G.k, 7, 0, 7); g.stroke(); }
+}
+$('#msStage').addEventListener('pointerdown', e => {
+  if (!MSX.lab) return; const r = $('#msStage').getBoundingClientRect(), G = msGeom(), x = Math.floor((e.clientX - r.left - G.ox) / G.k), y = Math.floor((e.clientY - r.top - G.oy) / G.k); if (x < 0 || y < 0 || x >= MSX.w || y >= MSX.h) return;
+  let l = MSX.lab[y * MSX.w + x]; if (!l || !MSX.comps.some(c => c.l === l)) { // objek terdekat dalam 25px
+    let best = 0, bd = 1e9; for (const c of MSX.comps) { const d = Math.hypot(c.cx * MSX.w - x, c.cy * MSX.h - y); if (d < bd) { bd = d; best = c.l; } } l = best; } if (!l) return;
+  MSX.keep.has(l) ? MSX.keep.delete(l) : MSX.keep.add(l); msInfo(); msDraw();
+});
+$('#msThr').oninput = () => { if (!MSX.P) return; msBuild(); msAuto(); }; $('#msMode').onchange = msAuto; $('#msAuto').onclick = msAuto;
+new ResizeObserver(() => { if ($('#mMain').classList.contains('show')) msSize(); }).observe($('#msStage'));
+$('#msCancel').onclick = () => { hide('mMain'); MSX.P = null; MSX.lab = null; };
+$('#msOk').onclick = async () => {
+  const L = MSX.L; if (!L || !MSX.keep.size) { toast('Pilih sekurang-kurangnya satu objek untuk dikekalkan', 1); return; } $('#msOk').disabled = true; msMsg('Menjana tepi halus…'); await tick();
+  try {
+    const { w, h, lab } = MSX, n = w * h, label = new Uint8Array(n); for (let i = 0; i < n; i++) if (lab[i] && MSX.keep.has(lab[i])) label[i] = 1;
+    { const inv = new Uint8Array(n); for (let i = 0; i < n; i++) inv[i] = label[i] ? 0 : 1; const cc = BGXC.components(inv, w, h), border = new Set(); for (let x = 0; x < w; x++) { border.add(cc.lab[x]); border.add(cc.lab[(h - 1) * w + x]); } for (let y = 0; y < h; y++) { border.add(cc.lab[y * w]); border.add(cc.lab[y * w + w - 1]); } for (let i = 0; i < n; i++) { const l = cc.lab[i]; if (l && !border.has(l) && cc.sizes[l] < n * 0.015) label[i] = 1; } }
+    const c = L.cv, fullI = { w: c.width, h: c.height, data: MSX.full.data }, al = BGXC.matte(fullI, label, w, h, { band: MSX.src === 'ai' ? 6 : 3, soft: 0.5, shrink: 0, hard: false }), img = BGXC.compose(fullI, al, {}), o = mk(img.width, img.height); o.getContext('2d').putImageData(img, 0, 0);
+    L.cv = o; L.name = L.name.replace(/ \(subjek utama\)$/, '') + ' (subjek utama)'; hide('mMain'); MSX.P = null; MSX.lab = null; refreshAll(); commit(); toast('Siap. Tidak tepat? Guna Buang Latar › Berus untuk baiki tepi.');
+  } catch (e) { toast('Gagal: ' + e.message, 1); }
+  msMsg(''); $('#msOk').disabled = false;
+};
+$('#bmMain').onclick = () => { hide('mBgm'); msOpen(BM.L); };
+
 // ===== Mod telefon gaya Photoroom: bar bawah kontekstual, panel mini, cubit-zum, panduan =====
 const MQ = matchMedia('(max-width:860px), (pointer:coarse) and (max-width:1100px)');
 const IOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
@@ -2287,7 +2364,7 @@ function mbarItems() {
   const common = [SEC('shadow', '◐', 'Bayang', 'Bayang', 'sh'), SEC('tr', '⤡', 'Ubah', 'Saiz & putar', 'tr'), SEC('pos', '⌖', 'Selari', 'Selari / posisi', 'pos'), lay, dup, del];
   if (L.kind === 'text') return [done, A('edit', '✎', 'Edit', () => openSheet('Edit teks', { sec: 'ch', keep: ['#tText'], id: 'edit' })), SEC('font', 'Aa', 'Fon', 'Fon & saiz', 'ch', ['#tFont', '#tSize', '#tB', '#tLs', '#tLh']), A('color', '🎨', 'Warna', () => openSheet('Warna', { custom: colorPanel, id: 'color' })), SEC('style', '✨', 'Gaya', 'Gaya pantas', 'ch', ['[data-sp]', '#tGOn']), SEC('curve', '⌒', 'Lengkung', 'Teks melengkung', 'ch', ['#tCv']), SEC('outline', '◯', 'Garis', 'Garis tepi teks', 'ch', ['#tSw']), SEC('box', '▭', 'Kotak', 'Latar teks', 'tbg'), SEC('para', '¶', 'Susun', 'Perenggan', 'pa'), ...common];
   if (L.kind === 'shape') return [done, A('color', '🎨', 'Warna', () => openSheet('Warna', { custom: colorPanel, id: 'color' })), SEC('grad', '◧', 'Gradien', 'Warna bentuk', 'col'), ...common.slice(0, 1), SEC('ol', '◯', 'Pelekat', 'Garis tepi (pelekat)', 'ol'), ...common.slice(1)];
-  return [done, A('cut', '✂', 'Buang Latar', () => openBgMethod(L), 'hl'), A('crop', '⛶', 'Potong', () => { closeSheet(true); setTool('crop'); }), A('wand', '🪄', 'Pilih', () => { closeSheet(true); setTool('wand'); }), A('adj', '🎚', 'Laras', () => $('#bAdj').click()), SEC('shadow', '◐', 'Bayang', 'Bayang', 'sh'), SEC('ol', '◯', 'Pelekat', 'Garis tepi (pelekat)', 'ol'), A('enh', '✨', 'Kualiti', () => $('#bEnh').click()), A('ht', '⁘', 'Halftone', () => htOpen(L)), SEC('op', '◔', 'Lutsinar', 'Lutsinar & adunan', 'adj'), SEC('tr', '⤡', 'Ubah', 'Saiz & putar', 'tr'), SEC('pos', '⌖', 'Selari', 'Selari / posisi', 'pos'), A('flip', '⇋', 'Balik', () => $('#lyFlipH').click()), lay, dup, del];
+  return [done, A('cut', '✂', 'Buang Latar', () => openBgMethod(L), 'hl'), A('main', '👤', 'Subjek Utama', () => msOpen(L)), A('crop', '⛶', 'Potong', () => { closeSheet(true); setTool('crop'); }), A('wand', '🪄', 'Pilih', () => { closeSheet(true); setTool('wand'); }), A('adj', '🎚', 'Laras', () => $('#bAdj').click()), SEC('shadow', '◐', 'Bayang', 'Bayang', 'sh'), SEC('ol', '◯', 'Pelekat', 'Garis tepi (pelekat)', 'ol'), A('enh', '✨', 'Kualiti', () => $('#bEnh').click()), A('ht', '⁘', 'Halftone', () => htOpen(L)), SEC('op', '◔', 'Lutsinar', 'Lutsinar & adunan', 'adj'), SEC('tr', '⤡', 'Ubah', 'Saiz & putar', 'tr'), SEC('pos', '⌖', 'Selari', 'Selari / posisi', 'pos'), A('flip', '⇋', 'Balik', () => $('#lyFlipH').click()), lay, dup, del];
 }
 let lastKey = '';
 function mbarRender() {
