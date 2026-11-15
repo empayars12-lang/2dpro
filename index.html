@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ms"><head><meta charset="utf-8"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="theme-color" content="#25262b"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1">
 <title>Pro Editor 2D</title>
-<meta name="app-version" content="1.6.0">
+<meta name="app-version" content="1.7.0">
 <style>:root{--bg:#1b1c20;--p1:#25262b;--p2:#2d2e34;--p3:#383a42;--ln:#41434c;--tx:#e8e9ee;--mu:#9a9ca8;--ac:#4c8dff;--ac2:#3a74da;--ok:#2fbf71;--no:#ef4f5f}
 *{box-sizing:border-box}html,body{height:100%;margin:0;background:var(--bg);color:var(--tx);font:13px/1.35 "Segoe UI",system-ui,Arial,sans-serif;overflow:hidden;user-select:none}
 button,select,input,textarea{font:inherit;color:inherit}
@@ -156,6 +156,8 @@ body.mob *{-webkit-touch-callout:none}
 .sp .ft{position:sticky;bottom:-14px;background:var(--p2);padding:10px 0 4px;margin-top:10px;z-index:3}
 
 body.mob #mMain .box{height:var(--vvh,100%);max-height:none;border-radius:0}body.mob #msStage{height:48vh!important}
+
+body.mob #bxAi{min-height:46px;font-size:15px}
 </style></head><body>
 <div id="app">
 <header id="top">
@@ -221,7 +223,7 @@ body.mob #mMain .box{height:var(--vvh,100%);max-height:none;border-radius:0}body
 <div id="msStage" style="height:min(56vh,520px);border:1px solid var(--ln);border-radius:8px;position:relative;overflow:hidden;touch-action:none"><canvas id="msCv" style="width:100%;height:100%;display:block"></canvas><div id="msMsg" style="position:absolute;left:10px;top:10px;background:#000b;padding:5px 10px;border-radius:6px;font-size:12px;display:none"></div></div>
 <div class="hint" id="msInfo" style="margin:6px 0"></div>
 <div class="row"><label>Pilih</label><select id="msMode"><option value="one">1 subjek utama (paling fokus)</option><option value="big">Semua subjek besar</option></select></div>
-<div class="row"><label>Sensitiviti</label><input type="range" id="msThr" min="20" max="80" value="50"></div>
+<div class="row"><label>Sensitiviti</label><input type="range" id="msThr" min="20" max="80" value="45"></div>
 <div class="ft"><button id="msCancel">Batal</button><button id="msAuto">↺ Pilih auto</button><button class="pri" id="msOk">Buang yang lain</button></div></div></div>
 <div class="modal" id="mHelp"><div class="box" style="width:520px;max-width:96vw"><h3>Panduan — buat flyer &amp; poster</h3>
 <div class="hl2">Gerak isyarat</div><ul class="hlp"><li><b>1 jari</b> pada objek = alih. Tarik <b>kotak sudut</b> = besar/kecil, <b>bulatan atas</b> = putar.</li><li><b>2 jari</b> = cubit untuk zum, seret untuk gerak paparan (sentiasa boleh).</li><li><b>Ketuk 2×</b> pada teks = edit tulisan.</li><li><b>Ketuk kawasan kosong</b> = nyahpilih.</li></ul>
@@ -299,6 +301,10 @@ body.mob #mMain .box{height:var(--vvh,100%);max-height:none;border-radius:0}body
       <div class="row"><label>Toleransi tepi</label><input type="range" id="bxEt" min="3" max="80" value="18"></div>
       <div class="row btns"><button id="bxEdge" class="pri">Buang latar dari tepi</button></div></div>
       <div id="bxSmart">
+      <div class="row btns"><button id="bxAi" class="pri">🤖 AI Pintar (fokus subjek)</button><button id="bxOrig">Tahan: asal</button></div>
+      <div class="row btns" id="bxAiRow" style="display:none"><button id="bxAiNext">↻ Subjek lain</button><button id="bxAiMore">＋ Tambah objek</button><button id="bxAiOff">✕ Tanpa AI</button></div>
+      <label class="spck" style="font-size:12px"><input type="checkbox" id="bxPort" checked> Guna model potret untuk orang (muat turun ±26 MB sekali, disimpan dalam peranti)</label>
+
       <div class="presets"><button data-pre="foto">Foto / Orang</button><button data-pre="produk">Produk / Logo</button><button data-pre="grafik">Grafik tepi tajam</button></div>
       <div class="row"><label>Toleransi latar</label><input type="range" id="bxTol" min="3" max="30" value="7"></div>
       <div class="row"><label>Lindungi subjek</label><input type="range" id="bxPro" min="60" max="180" value="100"></div>
@@ -309,7 +315,6 @@ body.mob #mMain .box{height:var(--vvh,100%);max-height:none;border-radius:0}body
       <div class="row"><label></label><label style="width:auto;color:var(--tx)"><input type="checkbox" id="bxHard"> Tepi tajam (tanpa lembut)</label></div>
       <div class="hint" style="margin:8px 0 2px">Warna latar dikesan (klik untuk hidup/mati):</div><div id="bxSw"></div>
       </div><div class="row"><label>Pratonton</label><select id="bxPv"><option value="chk">Petak lutsinar</option><option value="white">Putih</option><option value="black">Hitam</option><option value="green">Hijau</option><option value="mask">Topeng (hitam/putih)</option></select></div>
-      <div class="row btns"><button id="bxAi">🤖 AI bantu</button><button id="bxOrig">Tahan: asal</button></div>
       <div class="hint" id="bxInfo">Auto berjalan sendiri. Jika ada bahagian subjek terpotong: lukis berus <b>hijau</b> di situ. Jika latar masih tinggal: berus <b>merah</b>.</div>
       <label style="display:block;margin-top:8px;color:var(--mu)"><input type="checkbox" id="bxKeep"> Simpan salinan asal (tersembunyi)</label>
     </div>
@@ -330,7 +335,7 @@ body.mob #mMain .box{height:var(--vvh,100%);max-height:none;border-radius:0}body
   <div class="cards">
     <button class="card" id="bmSmart"><b>✨ Auto pintar</b><span>Paling mudah. Pratonton dahulu, kemudian betulkan dengan berus Simpan/Buang.</span></button>
     <button class="card" id="bmMain"><b>👤 Subjek utama</b><span>Gambar ramai orang / tempat awam: kekalkan orang yang paling fokus &amp; utama, buang yang lain. Ketuk untuk tukar.</span></button>
-    <button class="card" id="bmAi"><b>🤖 AI</b><span>Petunjuk AI + enjin warna untuk tepi tepat. <em id="bmAiN"></em></span></button>
+    <button class="card" id="bmAi"><b>🤖 AI Pintar (disyorkan)</b><span>AI cari subjek utama (fokus, besar, tengah), buang selebihnya, tepi halus. Boleh baiki dengan berus. <em id="bmAiN"></em></span></button>
     <button class="card" id="bmWand"><b>🪄 Tongkat ajaib</b><span>Klik kawasan yang mahu dibuang. Tiada yang terpotong kecuali yang anda klik.</span></button>
     <button class="card" id="bmColor"><b>🎨 Padam warna latar</b><span>Buang warna latar dari tepi (selamat untuk latar licin/seragam). Laras toleransi.</span></button>
     <button class="card" id="bmBrush"><b>🖌 Berus manual</b><span>Semua kekal; berus merah kawasan yang mahu dibuang.</span></button>
@@ -747,7 +752,8 @@ const AIX = (() => {
   const MODELS = {
     srFast: { file: 'realesr-general-x4v3.onnx', min: 3e6, name: 'Real-ESRGAN general x4v3 (cepat)' },
     srHq:   { file: 'realesrgan-x4plus.onnx',    min: 40e6, name: 'Real-ESRGAN x4plus (kualiti tinggi)' },
-    bg:     { file: 'u2netp.onnx',               min: 3e6, name: 'U2-Net-P (buang latar)' }
+    bg:     { file: 'u2netp.onnx',               min: 3e6, name: 'U2-Net-P (buang latar)' },
+    portrait: { file: 'modnet.onnx', min: 4e6, name: 'MODNet (potret)', url: 'https://huggingface.co/Xenova/modnet/resolve/main/onnx/model.onnx' }
   };
   let ortP = null; const sessions = {}; let cancelFlag = false;
   const abs = rel => new URL(rel, location.href).href;
@@ -775,14 +781,21 @@ const AIX = (() => {
     return ortP;
   }
   // sesi ringkas: infer(Float32Array NCHW, h, w) -> { data, h, w }
+  async function fetchModel(m) {
+    try { const r = await fetch(abs(MODEL_DIR + m.file), { cache: 'no-store' }); if (r.ok) { const b = await r.arrayBuffer(); if (b.byteLength >= m.min) return b; } } catch (e) { }
+    if (!m.url) throw new Error(`Model ${m.file} tiada — letak dalam folder models/`);
+    const cache = window.caches ? await caches.open('pe2d-models').catch(() => null) : null;
+    if (cache) { const hit = await cache.match(m.url).catch(() => null); if (hit) { const b = await hit.arrayBuffer(); if (b.byteLength >= m.min) return b; } }
+    const r = await fetch(m.url); if (!r.ok) throw new Error('muat turun ' + m.name + ' gagal (' + r.status + ')');
+    const b = await r.arrayBuffer(); if (b.byteLength < m.min) throw new Error('fail model tidak lengkap');
+    if (cache) { try { await cache.put(m.url, new Response(b)); } catch (e) { } } return b;
+  }
   async function getSession(kind) {
     if (api._inject) return api._inject.getSession(kind);
     if (sessions[kind]) return sessions[kind];
     const m = MODELS[kind]; if (!m) throw new Error('Model tidak dikenali');
     const ort = await loadOrt();
-    const r = await fetch(abs(MODEL_DIR + m.file), { cache: 'no-store' });
-    if (!r.ok) throw new Error(`Model ${m.file} tiada — jalankan PASANG-MODEL-AI.bat`);
-    const buf = await r.arrayBuffer();
+    const buf = await fetchModel(m);
     const s = await ort.InferenceSession.create(buf, { executionProviders: ['wasm'], graphOptimizationLevel: 'all' });
     const inName = s.inputNames[0], outName = s.outputNames[0];
     return (sessions[kind] = {
@@ -1840,7 +1853,7 @@ function bxOpen(L, opt = {}) {
   if (!L || L.kind === 'shape') { toast('Pilih lapisan imej dahulu', 1); return; }
   const c = L.cv, full = c.getContext('2d', { willReadFrequently: true }).getImageData(0, 0, c.width, c.height), k = Math.min(1, BXMAX / Math.max(c.width, c.height)), ww = Math.max(2, Math.round(c.width * k)), wh = Math.max(2, Math.round(c.height * k));
   const wc = mk(ww, wh), wx = wc.getContext('2d', { willReadFrequently: true }); wx.imageSmoothingQuality = 'high'; wx.drawImage(c, 0, 0, ww, wh);
-  Object.assign(BX, { on: true, L, mode: opt.mode || 'smart', full, wc, work: { w: ww, h: wh, data: wx.getImageData(0, 0, ww, wh).data }, marks: new Uint8Array(ww * wh), hasMarks: false, picked: [], useC: null, prior: null, res: mk(ww, wh), mk: mk(ww, wh), tool: 'fg', z: 1, px: 0, py: 0, label: null, alpha: null, info: null });
+  Object.assign(BX, { on: true, L, mode: opt.mode || 'smart', full, wc, work: { w: ww, h: wh, data: wx.getImageData(0, 0, ww, wh).data }, marks: new Uint8Array(ww * wh), hasMarks: false, picked: [], useC: null, prior: null, aiBase: null, ai: null, res: mk(ww, wh), mk: mk(ww, wh), tool: 'fg', z: 1, px: 0, py: 0, label: null, alpha: null, info: null });
   show('bx'); bxSize(); bxFit(); const man = BX.mode === 'manual'; $('#bxManual').style.display = man ? '' : 'none'; $('#bxSmart').style.display = man ? 'none' : ''; $('#bxAi').style.display = man ? 'none' : '';
   bxSetTool(opt.tool || 'fg'); $('#bxSw').innerHTML = ''; $('#bxInfo').innerHTML = man ? 'Mod manual: <b>klik</b> dengan tongkat 🪄 pada kawasan latar untuk membuangnya (Alt+klik = simpan semula). Berus merah/hijau juga boleh.' : $('#bxInfo').innerHTML; bxMsg('Memproses…');
   setTimeout(async () => { await bxRun(); if (opt.edge) bxEdge(); if (opt.ai) $('#bxAi').click(); }, 30);
@@ -1893,11 +1906,12 @@ async function bxRun() {
   if (!BX.on) return; if (bxBusy) { bxAgain = true; return; } bxBusy = true; await tick();
   try {
     if (BX.mode === 'manual') { bxManualRun(); bxBusy = false; bxDraw(); if (bxAgain) { bxAgain = false; bxSchedule(10); } return; }
-    const { w, h } = BX.work, o = bxOpts(), hard = $('#bxHard').checked, r = BGXC.segment(BX.work, o); BX.info = r.info;
+    const { w, h } = BX.work, o = bxOpts(), hard = $('#bxHard').checked; let r;
+    if (BX.aiBase) { const lb = BX.aiBase.slice(); let cnt = 0; for (let i = 0; i < w * h; i++) { if (BX.marks[i] === 1) lb[i] = 1; else if (BX.marks[i] === 2) lb[i] = 0; cnt += lb[i]; } r = { label: lb, info: { fgFrac: cnt / (w * h) } }; } else r = BGXC.segment(BX.work, o); BX.info = r.info;
     if (!BX.useC && r.info.clusters) bxSwatches(r.info.clusters);
     if (r.info.error) { bxMsg(r.info.error); $('#bxInfo').textContent = r.info.error; BX.label = null; }
     else {
-      BX.label = r.label; const al = BGXC.matte(BX.work, r.label, w, h, { band: 3, soft: +$('#bxSoft').value / 100, shrink: +$('#bxShr').value, hard }); BX.alpha = al;
+      BX.label = r.label; const al = BGXC.matte(BX.work, r.label, w, h, { band: BX.aiBase ? 6 : 3, soft: +$('#bxSoft').value / 100, shrink: +$('#bxShr').value, hard }); BX.alpha = al;
       const img = BGXC.compose(BX.work, al, {}); BX.res.getContext('2d').putImageData(img, 0, 0);
       const mi = new ImageData(w, h); for (let i = 0; i < w * h; i++) { const v = al[i] * 255; mi.data[i * 4] = mi.data[i * 4 + 1] = mi.data[i * 4 + 2] = v; mi.data[i * 4 + 3] = 255; } BX.maskC = mk(w, h); BX.maskC.getContext('2d').putImageData(mi, 0, 0);
       bxMsg(''); $('#bxInfo').innerHTML = `Subjek ≈ ${(r.info.fgFrac * 100).toFixed(0)}% imej. ` + (r.info.holes ? `${r.info.holes} lubang dalaman dikesan. ` : '') + 'Kurang tepat? Lukis berus <b>hijau</b> (kekal) / <b>merah</b> (buang).';
@@ -1935,18 +1949,23 @@ $('#bxOrig').onpointerdown = () => { bxHold = true; bxDraw(); }; addEventListene
 $('#bxClear').onclick = () => { BX.marks.fill(0); BX.mk.getContext('2d').clearRect(0, 0, BX.mk.width, BX.mk.height); BX.hasMarks = false; BX.picked = []; BX.useC = null; BX.prior = null; bxSchedule(20); };
 const BXP = { foto: { tol: 9, pro: 100, soft: 70, shr: 1, hard: false, hol: 'keep' }, produk: { tol: 7, pro: 110, soft: 40, shr: 0, hard: false, hol: 'keep' }, grafik: { tol: 6, pro: 100, soft: 0, shr: 0, hard: true, hol: 'remove' } };
 $$('#bxSide [data-pre]').forEach(b => b.onclick = () => { const p = BXP[b.dataset.pre]; $('#bxTol').value = p.tol; $('#bxPro').value = p.pro; $('#bxSoft').value = p.soft; $('#bxShr').value = p.shr; $('#bxHard').checked = p.hard; $('#bxHol').value = p.hol; bxSchedule(20); });
+function bxAiApply() {
+  const A = BX.ai; BX.aiBase = segLabel(A.an, A.keep, A.A); bxAiInfo(); bxSchedule(10);
+}
+function bxAiInfo() { const A = BX.ai; $('#bxAiRow').style.display = ''; toast(`AI: ${A.an.comps.length} objek dikesan, dikekalkan ${A.keep.size}${A.A ? ' (+model potret)' : ''}. Betulkan dengan berus Simpan/Buang atau tekan "Subjek lain".`); }
 $('#bxAi').onclick = async () => {
   try {
-    bxMsg('Memeriksa model AI…'); const st = await AIX.status(); if (!st.bg) { bxMsg(''); toast('AI tidak tersedia: perlukan fail model (vendor/ort + models/u2netp.onnx) dan dibuka melalui http(s). Mod pintar biasa sudah berfungsi tanpa AI.', 1); return; }
-    bxMsg('AI menganalisis…'); await tick(); const sess = await AIX.getSession('bg'), SZ = 320, sc = mk(SZ, SZ), sx = sc.getContext('2d'); sx.imageSmoothingQuality = 'high'; sx.drawImage(BX.wc, 0, 0, SZ, SZ);
-    const d = sx.getImageData(0, 0, SZ, SZ).data, pl = SZ * SZ, inp = new Float32Array(3 * pl); let mx = 1; for (let i = 0; i < pl; i++) mx = Math.max(mx, d[i * 4], d[i * 4 + 1], d[i * 4 + 2]);
-    const mean = [0.485, 0.456, 0.406], sd = [0.229, 0.224, 0.225]; for (let i = 0; i < pl; i++) for (let c = 0; c < 3; c++) inp[c * pl + i] = (d[i * 4 + c] / mx - mean[c]) / sd[c];
-    const res = await sess.infer(inp, SZ, SZ), p = res.data; let lo = 1e9, hi = -1e9; for (let i = 0; i < pl; i++) { lo = Math.min(lo, p[i]); hi = Math.max(hi, p[i]); }
-    const mi = new ImageData(SZ, SZ); for (let i = 0; i < pl; i++) { const v = (p[i] - lo) / ((hi - lo) || 1) * 255; mi.data[i * 4] = mi.data[i * 4 + 1] = mi.data[i * 4 + 2] = v; mi.data[i * 4 + 3] = 255; }
-    const mc = mk(SZ, SZ); mc.getContext('2d').putImageData(mi, 0, 0); const { w, h } = BX.work, up = mk(w, h), ux = up.getContext('2d'); ux.imageSmoothingQuality = 'high'; ux.drawImage(mc, 0, 0, w, h);
-    const ud = ux.getImageData(0, 0, w, h).data; BX.prior = new Float32Array(w * h); for (let i = 0; i < w * h; i++) BX.prior[i] = ud[i * 4] / 255; bxSchedule(10); toast('AI digunakan sebagai petunjuk — tepi tetap dikira oleh enjin warna');
+    bxMsg('Memeriksa model AI…'); const st = await AIX.status(); if (!st.bg) { bxMsg(''); toast('AI tidak tersedia: letak fail models/u2netp.onnx di GitHub dan buka melalui http(s). Mod pintar biasa tetap berfungsi tanpa AI.', 1); return; }
+    const { w, h } = BX.work; bxMsg('AI mencari subjek utama…'); await tick(); const P = await aiProbMap(BX.wc, w, h); let A = null;
+    if ($('#bxPort').checked) { try { bxMsg('Memuat model potret (sekali sahaja)…'); await tick(); A = await portraitAlpha(BX.wc, w, h); } catch (e) { toast('Model potret tidak dapat dimuat — guna AI asas sahaja (' + e.message + ')', 1); } }
+    bxMsg('Memilih subjek utama…'); await tick(); const an = segAnalyze(P, w, h, BX.work.data, 0.45);
+    if (!an.comps.length) { bxMsg(''); toast('AI tidak menjumpai subjek jelas. Guna berus Simpan hijau pada subjek.', 1); return; }
+    BX.ai = { an, A, idx: 0, keep: new Set([an.comps[0].l]) }; bxAiApply();
   } catch (e) { bxMsg(''); toast('AI gagal: ' + e.message, 1); }
 };
+$('#bxAiNext').onclick = () => { const A = BX.ai; if (!A) return; A.idx = (A.idx + 1) % A.an.comps.length; A.keep = new Set([A.an.comps[A.idx].l]); bxAiApply(); };
+$('#bxAiMore').onclick = () => { const A = BX.ai; if (!A) return; const nx = A.an.comps.find(c => !A.keep.has(c.l)); if (!nx) { toast('Tiada objek lain'); return; } A.keep.add(nx.l); bxAiApply(); };
+$('#bxAiOff').onclick = () => { BX.aiBase = null; BX.ai = null; $('#bxAiRow').style.display = 'none'; bxSchedule(10); };
 function bxClose() { BX.on = false; hide('bx'); bxMsg(''); }
 $('#bxCancel').onclick = bxClose;
 $('#bxOk').onclick = async () => {
@@ -1959,7 +1978,7 @@ $('#bxOk').onclick = async () => {
       L.cv = c; L.name = L.name.replace(/ \(tanpa latar\)$/, '') + ' (tanpa latar)'; if (L.kind !== 'img') L.kind = 'img'; bxClose(); refreshAll(); commit(); toast('Latar dibuang'); $('#bxOk').disabled = false; bxMsg(''); return;
     }
     const o = bxOpts(), hard = $('#bxHard').checked; const full = { w: BX.full.width, h: BX.full.height, data: BX.full.data };
-    const al = BGXC.matte(full, BX.label, BX.work.w, BX.work.h, { band: 3, soft: +$('#bxSoft').value / 100, shrink: +$('#bxShr').value * (full.w / BX.work.w), hard });
+    const al = BGXC.matte(full, BX.label, BX.work.w, BX.work.h, { band: BX.aiBase ? 6 : 3, soft: +$('#bxSoft').value / 100, shrink: +$('#bxShr').value * (full.w / BX.work.w), hard });
     const img = BGXC.compose(full, al, {}), c = mk(img.width, img.height); c.getContext('2d').putImageData(img, 0, 0);
     if ($('#bxKeep').checked) { const cp = snapLayer(L); cp.id = UID++; cp.name = L.name + ' (asal)'; cp.vis = false; S.layers.splice(S.layers.indexOf(L), 0, cp); }
     L.cv = c; L.name = L.name.replace(/ \(tanpa latar\)$/, '') + ' (tanpa latar)'; if (L.kind !== 'img') L.kind = 'img'; bxClose(); refreshAll(); commit(); toast('Latar dibuang');
@@ -2246,11 +2265,12 @@ async function spGenerate(rand) {
 }
 $('#bSmart') && ($('#bSmart').onclick = openSmart);
 
-// ===== Subjek Utama: AI (atau warna) cari objek/orang -> pilih yang utama (fokus, besar, tengah) -> buang yang lain =====
-const MSX = { L: null, w: 0, h: 0, wc: null, data: null, P: null, src: '', lab: null, comps: [], keep: new Set(), full: null, busy: false };
+// ===== AI Pintar & Subjek Utama: cari subjek utama (fokus/besar/tengah), buang yang lain =====
+const MSX = { L: null, w: 0, h: 0, wc: null, data: null, P: null, src: '', an: null, lab: null, comps: [], keep: new Set(), full: null };
 const msMsg = t => { const e = $('#msMsg'); e.textContent = t || ''; e.style.display = t ? 'block' : 'none'; };
-async function aiSaliency(wc, w, h) {
-  const sess = await AIX.getSession('bg'), SZ = 320, sc = mk(SZ, SZ), sx = sc.getContext('2d'); sx.imageSmoothingQuality = 'high'; sx.drawImage(wc, 0, 0, SZ, SZ);
+// ---- peta saliensi U2-Net-P (+ imbas cermin supaya lebih stabil) ----
+async function aiOne(cv, w, h) {
+  const sess = await AIX.getSession('bg'), SZ = 320, sc = mk(SZ, SZ), sx = sc.getContext('2d'); sx.imageSmoothingQuality = 'high'; sx.drawImage(cv, 0, 0, SZ, SZ);
   const d = sx.getImageData(0, 0, SZ, SZ).data, pl = SZ * SZ, inp = new Float32Array(3 * pl); let mx = 1; for (let i = 0; i < pl; i++) mx = Math.max(mx, d[i * 4], d[i * 4 + 1], d[i * 4 + 2]);
   const mean = [0.485, 0.456, 0.406], sd = [0.229, 0.224, 0.225]; for (let i = 0; i < pl; i++) for (let c = 0; c < 3; c++) inp[c * pl + i] = (d[i * 4 + c] / mx - mean[c]) / sd[c];
   const res = await sess.infer(inp, SZ, SZ), p = res.data; let lo = 1e9, hi = -1e9; for (let i = 0; i < pl; i++) { lo = Math.min(lo, p[i]); hi = Math.max(hi, p[i]); }
@@ -2258,27 +2278,64 @@ async function aiSaliency(wc, w, h) {
   const mc = mk(SZ, SZ); mc.getContext('2d').putImageData(mi, 0, 0); const up = mk(w, h), ux = up.getContext('2d'); ux.imageSmoothingQuality = 'high'; ux.drawImage(mc, 0, 0, w, h);
   const ud = ux.getImageData(0, 0, w, h).data, P = new Float32Array(w * h); for (let i = 0; i < w * h; i++) P[i] = ud[i * 4] / 255; return P;
 }
+async function aiProbMap(wc, w, h) {
+  const P1 = await aiOne(wc, w, h), fc = mk(w, h), fx = fc.getContext('2d'); fx.translate(w, 0); fx.scale(-1, 1); fx.drawImage(wc, 0, 0); const P2 = await aiOne(fc, w, h), P = new Float32Array(w * h);
+  for (let y = 0; y < h; y++) for (let x = 0; x < w; x++) P[y * w + x] = (P1[y * w + x] + P2[y * w + (w - 1 - x)]) / 2; return P;
+}
+// ---- matte potret (MODNet): alfa lembut untuk orang ----
+async function portraitAlpha(wc, w, h) {
+  const sess = await AIX.getSession('portrait'), ref = 512; let rw, rh; if (w >= h) { rh = ref; rw = Math.round(w / h * ref); } else { rw = ref; rh = Math.round(h / w * ref); }
+  rw = Math.min(768, Math.max(32, Math.round(rw / 32) * 32)); rh = Math.min(768, Math.max(32, Math.round(rh / 32) * 32));
+  const c = mk(rw, rh), cx = c.getContext('2d'); cx.imageSmoothingQuality = 'high'; cx.drawImage(wc, 0, 0, rw, rh); const d = cx.getImageData(0, 0, rw, rh).data, pl = rw * rh, inp = new Float32Array(3 * pl);
+  for (let i = 0; i < pl; i++) for (let k = 0; k < 3; k++) inp[k * pl + i] = d[i * 4 + k] / 127.5 - 1;
+  const res = await sess.infer(inp, rh, rw), o = res.data, ow = res.w, oh = res.h, mi = new ImageData(ow, oh);
+  for (let i = 0; i < ow * oh; i++) { const v = Math.max(0, Math.min(1, o[i])) * 255; mi.data[i * 4] = mi.data[i * 4 + 1] = mi.data[i * 4 + 2] = v; mi.data[i * 4 + 3] = 255; }
+  const mc = mk(ow, oh); mc.getContext('2d').putImageData(mi, 0, 0); const up = mk(w, h), ux = up.getContext('2d'); ux.imageSmoothingQuality = 'high'; ux.drawImage(mc, 0, 0, w, h);
+  const ud = ux.getImageData(0, 0, w, h).data, A = new Float32Array(w * h); for (let i = 0; i < w * h; i++) A[i] = ud[i * 4] / 255; return A;
+}
+// ---- analisis: teras yakin -> tumbuh sedikit -> skor (fokus, saiz, tengah) ----
+function segAnalyze(P, w, h, data, thrLo) {
+  const n = w * h, hi = Math.min(0.92, thrLo + 0.3), bin = new Uint8Array(n); for (let i = 0; i < n; i++) bin[i] = P[i] > hi ? 1 : 0;
+  const cc = BGXC.components(bin, w, h), N = cc.sizes.length, lab = new Int32Array(n), dist = new Uint8Array(n), q = new Int32Array(n), minCore = Math.max(6, n * 0.0004); let qh = 0, qt = 0;
+  for (let i = 0; i < n; i++) { const l = cc.lab[i]; if (l && cc.sizes[l] >= minCore) { lab[i] = l; q[qt++] = i; } }
+  const R = Math.max(3, Math.round(0.015 * Math.max(w, h)));
+  while (qh < qt) { const i = q[qh++], dd = dist[i]; if (dd >= R) continue; const x = i % w, nb = [x > 0 ? i - 1 : -1, x < w - 1 ? i + 1 : -1, i >= w ? i - w : -1, i < n - w ? i + w : -1]; for (const j of nb) if (j >= 0 && !lab[j] && P[j] > thrLo) { lab[j] = lab[i]; dist[j] = dd + 1; q[qt++] = j; } }
+  const G = new Float32Array(n), lum = new Float32Array(n); for (let i = 0; i < n; i++) lum[i] = 0.299 * data[i * 4] + 0.587 * data[i * 4 + 1] + 0.114 * data[i * 4 + 2];
+  let gs = 0; for (let y = 1; y < h - 1; y++) for (let x = 1; x < w - 1; x++) { const i = y * w + x, g = Math.abs(lum[i + 1] - lum[i - 1]) + Math.abs(lum[i + w] - lum[i - w]); G[i] = g; gs += g; } const gm = gs / n + 1e-3;
+  const A = new Float64Array(N), SP = new Float64Array(N), SG = new Float64Array(N), CI = new Float64Array(N), SX = new Float64Array(N), SY = new Float64Array(N);
+  for (let y = 1; y < h - 1; y++) for (let x = 1; x < w - 1; x++) { const i = y * w + x, l = lab[i]; if (!l) continue; A[l]++; SP[l] += P[i]; SX[l] += x; SY[l] += y; if (lab[i - 1] === l && lab[i + 1] === l && lab[i - w] === l && lab[i + w] === l) { SG[l] += G[i]; CI[l]++; } }
+  const comps = []; for (let l = 1; l < N; l++) { if (A[l] < n * 0.004) continue; const share = A[l] / n, cx = SX[l] / A[l] / w, cy = SY[l] / A[l] / h, dst = Math.hypot(cx - 0.5, cy - 0.5) / 0.7071, sharp = CI[l] ? (SG[l] / CI[l]) / gm : 1, mp = SP[l] / A[l];
+    comps.push({ l, share, cx, cy, dist: dst, sharp, mp, score: mp * Math.sqrt(share) * (1 - 0.5 * dst) * (0.6 + 0.4 * Math.min(2, sharp)) }); }
+  comps.sort((a, b) => b.score - a.score); return { lab, comps, w, h };
+}
+function fillHoles(label, w, h) {
+  const n = w * h, inv = new Uint8Array(n); for (let i = 0; i < n; i++) inv[i] = label[i] ? 0 : 1; const cc = BGXC.components(inv, w, h), border = new Set();
+  for (let x = 0; x < w; x++) { border.add(cc.lab[x]); border.add(cc.lab[(h - 1) * w + x]); } for (let y = 0; y < h; y++) { border.add(cc.lab[y * w]); border.add(cc.lab[y * w + w - 1]); }
+  for (let i = 0; i < n; i++) { const l = cc.lab[i]; if (l && !border.has(l) && cc.sizes[l] < n * 0.015) label[i] = 1; }
+}
+// label akhir: kawasan dikekalkan (+ matte potret jika ada)
+function segLabel(an, keep, A) {
+  const { w, h, lab } = an, n = w * h, label = new Uint8Array(n); for (let i = 0; i < n; i++) if (lab[i] && keep.has(lab[i])) label[i] = 1;
+  if (A) {
+    const ab = new Uint8Array(n); for (let i = 0; i < n; i++) ab[i] = A[i] > 0.5 ? 1 : 0; const ac = BGXC.components(ab, w, h), ov = new Float64Array(ac.sizes.length); for (let i = 0; i < n; i++) if (ab[i] && label[i]) ov[ac.lab[i]]++;
+    const person = new Uint8Array(n); let pa = 0, ma = 0; for (let i = 0; i < n; i++) { const l = ac.lab[i]; if (l && ov[l] > 0.3 * ac.sizes[l]) { person[i] = 1; pa++; } ma += label[i]; }
+    if (pa >= 0.35 * ma && pa > 0) { const r = Math.max(2, Math.round(0.03 * Math.max(w, h))), dil = BGXC.boxMean(Float32Array.from(person), w, h, r); for (let i = 0; i < n; i++) label[i] = (person[i] || (label[i] && dil[i] > 0.02)) ? 1 : 0; }
+  }
+  fillHoles(label, w, h); return label;
+}
+// ======== Modal "Subjek Utama" (ketuk untuk pilih) ========
 async function msOpen(L) {
   L = L || selLayer(); if (!L || L.kind === 'shape') { toast('Pilih lapisan imej dahulu', 1); return; } MSX.L = L; show('mMain'); msMsg('Menganalisis gambar…'); $('#msInfo').textContent = ''; await tick();
   try {
     const c = L.cv, k = Math.min(1, 900 / Math.max(c.width, c.height)), w = Math.max(2, Math.round(c.width * k)), h = Math.max(2, Math.round(c.height * k)), wc = mk(w, h), wx = wc.getContext('2d', { willReadFrequently: true }); wx.imageSmoothingQuality = 'high'; wx.drawImage(c, 0, 0, w, h);
-    Object.assign(MSX, { w, h, wc, data: wx.getImageData(0, 0, w, h).data, full: c.getContext('2d', { willReadFrequently: true }).getImageData(0, 0, c.width, c.height) });
+    Object.assign(MSX, { w, h, wc, P: null, data: wx.getImageData(0, 0, w, h).data, full: c.getContext('2d', { willReadFrequently: true }).getImageData(0, 0, c.width, c.height) });
     const st = await AIX.status().catch(() => ({}));
-    if (st.bg) { try { MSX.P = await aiSaliency(wc, w, h); MSX.src = 'ai'; } catch (e) { MSX.P = null; toast('AI gagal: ' + e.message + ' — guna kaedah warna', 1); } }
+    if (st.bg) { try { MSX.P = await aiProbMap(wc, w, h); MSX.src = 'ai'; } catch (e) { MSX.P = null; toast('AI gagal: ' + e.message + ' — guna kaedah warna', 1); } }
     if (!MSX.P) { const r = BGXC.segment({ w, h, data: MSX.data }, { tol: 7, protect: 1, holes: 'keep' }); if (r.info.error) { msMsg(''); $('#msInfo').textContent = 'Gagal: ' + r.info.error; return; } MSX.P = Float32Array.from(r.label, v => v ? 1 : 0); MSX.src = 'warna'; }
     msBuild(); msAuto(); msSize(); msMsg('');
   } catch (e) { msMsg(''); toast('Gagal: ' + e.message, 1); }
 }
-function msBuild() {
-  const { w, h, P, data } = MSX, n = w * h, thr = $('#msThr').value / 100, bin = new Uint8Array(n); for (let i = 0; i < n; i++) bin[i] = P[i] > thr ? 1 : 0;
-  const cc = BGXC.components(bin, w, h), lab = cc.lab, N = cc.sizes.length, G = new Float32Array(n), lum = new Float32Array(n); for (let i = 0; i < n; i++) lum[i] = 0.299 * data[i * 4] + 0.587 * data[i * 4 + 1] + 0.114 * data[i * 4 + 2];
-  let gs = 0; for (let y = 1; y < h - 1; y++) for (let x = 1; x < w - 1; x++) { const i = y * w + x, g = Math.abs(lum[i + 1] - lum[i - 1]) + Math.abs(lum[i + w] - lum[i - w]); G[i] = g; gs += g; } const gm = gs / n + 1e-3;
-  const A = new Float64Array(N), SP = new Float64Array(N), SG = new Float64Array(N), CI = new Float64Array(N), SX = new Float64Array(N), SY = new Float64Array(N);
-  for (let y = 1; y < h - 1; y++) for (let x = 1; x < w - 1; x++) { const i = y * w + x, l = lab[i]; if (!l) continue; A[l]++; SP[l] += P[i]; SX[l] += x; SY[l] += y; if (lab[i - 1] === l && lab[i + 1] === l && lab[i - w] === l && lab[i + w] === l) { SG[l] += G[i]; CI[l]++; } }
-  const comps = []; for (let l = 1; l < N; l++) { if (A[l] < n * 0.004) continue; const share = A[l] / n, cx = SX[l] / A[l] / w, cy = SY[l] / A[l] / h, dist = Math.hypot(cx - 0.5, cy - 0.5) / 0.7071, sharp = CI[l] ? (SG[l] / CI[l]) / gm : 1, mp = SP[l] / A[l];
-    comps.push({ l, share, cx, cy, dist, sharp, mp, score: mp * Math.sqrt(share) * (1 - 0.5 * dist) * (0.6 + 0.4 * Math.min(2, sharp)) }); }
-  comps.sort((a, b) => b.score - a.score); MSX.lab = lab; MSX.comps = comps;
-}
+function msBuild() { const an = segAnalyze(MSX.P, MSX.w, MSX.h, MSX.data, $('#msThr').value / 100); MSX.an = an; MSX.lab = an.lab; MSX.comps = an.comps; }
 function msAuto() {
   const cs = MSX.comps; MSX.keep = new Set(); if (!cs.length) { $('#msInfo').textContent = 'Tiada objek dikesan. Cuba turunkan Sensitiviti.'; msDraw(); return; }
   if ($('#msMode').value === 'one') MSX.keep.add(cs[0].l); else cs.forEach(c => { if (c.score >= cs[0].score * 0.45 && c.share >= 0.02) MSX.keep.add(c.l); }); if (!MSX.keep.size) MSX.keep.add(cs[0].l);
@@ -2290,14 +2347,13 @@ function msGeom() { const cv = $('#msCv'), d = devicePixelRatio || 1, W = cv.wid
 function msDraw() {
   if (!MSX.wc || !MSX.lab) return; const cv = $('#msCv'), g = cv.getContext('2d'), G = msGeom(), { w, h, lab } = MSX; g.setTransform(1, 0, 0, 1, 0, 0); g.clearRect(0, 0, cv.width, cv.height); g.fillStyle = '#101114'; g.fillRect(0, 0, cv.width, cv.height);
   g.setTransform(G.d, 0, 0, G.d, 0, 0); g.imageSmoothingQuality = 'high'; g.drawImage(MSX.wc, G.ox, G.oy, w * G.k, h * G.k);
-  const ov = new ImageData(w, h), od = ov.data, big = new Set(MSX.comps.map(c => c.l)); for (let i = 0; i < w * h; i++) { const l = lab[i], q = i * 4; if (l && MSX.keep.has(l)) { continue; } if (l && big.has(l)) { od[q] = 230; od[q + 1] = 40; od[q + 2] = 50; od[q + 3] = 120; } else { od[q] = 0; od[q + 1] = 0; od[q + 2] = 0; od[q + 3] = 150; } }
+  const ov = new ImageData(w, h), od = ov.data, big = new Set(MSX.comps.map(c => c.l)); for (let i = 0; i < w * h; i++) { const l = lab[i], q = i * 4; if (l && MSX.keep.has(l)) continue; if (l && big.has(l)) { od[q] = 230; od[q + 1] = 40; od[q + 2] = 50; od[q + 3] = 120; } else { od[q] = 0; od[q + 1] = 0; od[q + 2] = 0; od[q + 3] = 150; } }
   const oc = mk(w, h); oc.getContext('2d').putImageData(ov, 0, 0); g.drawImage(oc, G.ox, G.oy, w * G.k, h * G.k);
   g.lineWidth = 2; g.strokeStyle = '#2fe08a'; for (const c of MSX.comps) if (MSX.keep.has(c.l)) { g.beginPath(); g.arc(G.ox + c.cx * w * G.k, G.oy + c.cy * h * G.k, 7, 0, 7); g.stroke(); }
 }
 $('#msStage').addEventListener('pointerdown', e => {
   if (!MSX.lab) return; const r = $('#msStage').getBoundingClientRect(), G = msGeom(), x = Math.floor((e.clientX - r.left - G.ox) / G.k), y = Math.floor((e.clientY - r.top - G.oy) / G.k); if (x < 0 || y < 0 || x >= MSX.w || y >= MSX.h) return;
-  let l = MSX.lab[y * MSX.w + x]; if (!l || !MSX.comps.some(c => c.l === l)) { // objek terdekat dalam 25px
-    let best = 0, bd = 1e9; for (const c of MSX.comps) { const d = Math.hypot(c.cx * MSX.w - x, c.cy * MSX.h - y); if (d < bd) { bd = d; best = c.l; } } l = best; } if (!l) return;
+  let l = MSX.lab[y * MSX.w + x]; if (!l || !MSX.comps.some(c => c.l === l)) { let best = 0, bd = 1e9; for (const c of MSX.comps) { const d = Math.hypot(c.cx * MSX.w - x, c.cy * MSX.h - y); if (d < bd) { bd = d; best = c.l; } } l = best; } if (!l) return;
   MSX.keep.has(l) ? MSX.keep.delete(l) : MSX.keep.add(l); msInfo(); msDraw();
 });
 $('#msThr').oninput = () => { if (!MSX.P) return; msBuild(); msAuto(); }; $('#msMode').onchange = msAuto; $('#msAuto').onclick = msAuto;
@@ -2306,10 +2362,8 @@ $('#msCancel').onclick = () => { hide('mMain'); MSX.P = null; MSX.lab = null; };
 $('#msOk').onclick = async () => {
   const L = MSX.L; if (!L || !MSX.keep.size) { toast('Pilih sekurang-kurangnya satu objek untuk dikekalkan', 1); return; } $('#msOk').disabled = true; msMsg('Menjana tepi halus…'); await tick();
   try {
-    const { w, h, lab } = MSX, n = w * h, label = new Uint8Array(n); for (let i = 0; i < n; i++) if (lab[i] && MSX.keep.has(lab[i])) label[i] = 1;
-    { const inv = new Uint8Array(n); for (let i = 0; i < n; i++) inv[i] = label[i] ? 0 : 1; const cc = BGXC.components(inv, w, h), border = new Set(); for (let x = 0; x < w; x++) { border.add(cc.lab[x]); border.add(cc.lab[(h - 1) * w + x]); } for (let y = 0; y < h; y++) { border.add(cc.lab[y * w]); border.add(cc.lab[y * w + w - 1]); } for (let i = 0; i < n; i++) { const l = cc.lab[i]; if (l && !border.has(l) && cc.sizes[l] < n * 0.015) label[i] = 1; } }
-    const c = L.cv, fullI = { w: c.width, h: c.height, data: MSX.full.data }, al = BGXC.matte(fullI, label, w, h, { band: MSX.src === 'ai' ? 6 : 3, soft: 0.5, shrink: 0, hard: false }), img = BGXC.compose(fullI, al, {}), o = mk(img.width, img.height); o.getContext('2d').putImageData(img, 0, 0);
-    L.cv = o; L.name = L.name.replace(/ \(subjek utama\)$/, '') + ' (subjek utama)'; hide('mMain'); MSX.P = null; MSX.lab = null; refreshAll(); commit(); toast('Siap. Tidak tepat? Guna Buang Latar › Berus untuk baiki tepi.');
+    const { w, h } = MSX, label = segLabel(MSX.an, MSX.keep, null), c = L.cv, fullI = { w: c.width, h: c.height, data: MSX.full.data }, al = BGXC.matte(fullI, label, w, h, { band: MSX.src === 'ai' ? 6 : 3, soft: 0.5, shrink: 0, hard: false }), img = BGXC.compose(fullI, al, {}), o = mk(img.width, img.height); o.getContext('2d').putImageData(img, 0, 0);
+    L.cv = o; L.name = L.name.replace(/ \(subjek utama\)$/, '') + ' (subjek utama)'; hide('mMain'); MSX.P = null; MSX.lab = null; refreshAll(); commit(); toast('Siap. Tidak tepat? Guna Buang Latar › AI Pintar untuk baiki dengan berus.');
   } catch (e) { toast('Gagal: ' + e.message, 1); }
   msMsg(''); $('#msOk').disabled = false;
 };
@@ -2398,6 +2452,19 @@ stage.addEventListener('pointermove', e => {
 }, true);
 const pend = e => { PT.delete(e.pointerId); if (pinch) { e.stopImmediatePropagation(); if (PT.size < 2) pinch = null; } };
 stage.addEventListener('pointerup', pend, true); stage.addEventListener('pointercancel', pend, true);
+// cubit-zum dalam tetingkap Buang Latar (untuk kerja terperinci)
+const BPT = new Map(); let bpin = null;
+bxSt.addEventListener('pointerdown', e => {
+  if (e.pointerType !== 'touch') return; BPT.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  if (BPT.size === 2) { bxDrag = null; const [a, b] = [...BPT.values()], r = bxSt.getBoundingClientRect(); bpin = { d: Math.hypot(a.x - b.x, a.y - b.y) || 1, cx: (a.x + b.x) / 2 - r.left, cy: (a.y + b.y) / 2 - r.top, z: BX.z, px: BX.px, py: BX.py }; }
+  if (BPT.size >= 2) { e.stopImmediatePropagation(); e.preventDefault(); }
+}, true);
+bxSt.addEventListener('pointermove', e => {
+  if (!BPT.has(e.pointerId)) return; BPT.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  if (bpin && BPT.size >= 2) { const [a, b] = [...BPT.values()], r = bxSt.getBoundingClientRect(), d = Math.hypot(a.x - b.x, a.y - b.y) || 1, cx = (a.x + b.x) / 2 - r.left, cy = (a.y + b.y) / 2 - r.top, nz = clamp(bpin.z * d / bpin.d, 0.1, 40), k = nz / bpin.z; BX.z = nz; BX.px = cx - (bpin.cx - bpin.px) * k; BX.py = cy - (bpin.cy - bpin.py) * k; bxDraw(); e.stopImmediatePropagation(); e.preventDefault(); }
+}, true);
+const bpend = e => { BPT.delete(e.pointerId); if (bpin) { e.stopImmediatePropagation(); if (BPT.size < 2) bpin = null; } };
+bxSt.addEventListener('pointerup', bpend, true); bxSt.addEventListener('pointercancel', bpend, true);
 // ketuk 2x pada teks = edit tulisan
 stage.addEventListener('pointerup', e => {
   if (e.pointerType !== 'touch' || !isMob() || S.tool !== 'move') return; const L = selLayer(), now = Date.now(), moved = Math.hypot(e.clientX - tapInfo.x, e.clientY - tapInfo.y) > 10; if (moved) { tapInfo.t = 0; return; }
