@@ -1,3 +1,0 @@
-git mv modelsu2netp.onnx nama-baru.onnx
-git commit -m "models/u2netp.onnx"
-git push
