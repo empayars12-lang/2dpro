@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ms"><head><meta charset="utf-8"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="theme-color" content="#25262b"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1">
 <title>Pro Editor 2D</title>
-<meta name="app-version" content="1.7.0">
+<meta name="app-version" content="1.8.0">
 <style>:root{--bg:#1b1c20;--p1:#25262b;--p2:#2d2e34;--p3:#383a42;--ln:#41434c;--tx:#e8e9ee;--mu:#9a9ca8;--ac:#4c8dff;--ac2:#3a74da;--ok:#2fbf71;--no:#ef4f5f}
 *{box-sizing:border-box}html,body{height:100%;margin:0;background:var(--bg);color:var(--tx);font:13px/1.35 "Segoe UI",system-ui,Arial,sans-serif;overflow:hidden;user-select:none}
 button,select,input,textarea{font:inherit;color:inherit}
@@ -304,6 +304,7 @@ body.mob #bxAi{min-height:46px;font-size:15px}
       <div class="row btns"><button id="bxAi" class="pri">🤖 AI Pintar (fokus subjek)</button><button id="bxOrig">Tahan: asal</button></div>
       <div class="row btns" id="bxAiRow" style="display:none"><button id="bxAiNext">↻ Subjek lain</button><button id="bxAiMore">＋ Tambah objek</button><button id="bxAiOff">✕ Tanpa AI</button></div>
       <label class="spck" style="font-size:12px"><input type="checkbox" id="bxPort" checked> Guna model potret untuk orang (muat turun ±26 MB sekali, disimpan dalam peranti)</label>
+      <label class="spck" style="font-size:12px"><input type="checkbox" id="bxClean" checked> Bersihkan sisa latar di tepi (cth. lantai gelap dekat kaki)</label>
 
       <div class="presets"><button data-pre="foto">Foto / Orang</button><button data-pre="produk">Produk / Logo</button><button data-pre="grafik">Grafik tepi tajam</button></div>
       <div class="row"><label>Toleransi latar</label><input type="range" id="bxTol" min="3" max="30" value="7"></div>
@@ -1950,7 +1951,7 @@ $('#bxClear').onclick = () => { BX.marks.fill(0); BX.mk.getContext('2d').clearRe
 const BXP = { foto: { tol: 9, pro: 100, soft: 70, shr: 1, hard: false, hol: 'keep' }, produk: { tol: 7, pro: 110, soft: 40, shr: 0, hard: false, hol: 'keep' }, grafik: { tol: 6, pro: 100, soft: 0, shr: 0, hard: true, hol: 'remove' } };
 $$('#bxSide [data-pre]').forEach(b => b.onclick = () => { const p = BXP[b.dataset.pre]; $('#bxTol').value = p.tol; $('#bxPro').value = p.pro; $('#bxSoft').value = p.soft; $('#bxShr').value = p.shr; $('#bxHard').checked = p.hard; $('#bxHol').value = p.hol; bxSchedule(20); });
 function bxAiApply() {
-  const A = BX.ai; BX.aiBase = segLabel(A.an, A.keep, A.A); bxAiInfo(); bxSchedule(10);
+  const A = BX.ai; BX.aiBase = segLabel(A.an, A.keep, A.A, BX.work.data); bxAiInfo(); bxSchedule(10);
 }
 function bxAiInfo() { const A = BX.ai; $('#bxAiRow').style.display = ''; toast(`AI: ${A.an.comps.length} objek dikesan, dikekalkan ${A.keep.size}${A.A ? ' (+model potret)' : ''}. Betulkan dengan berus Simpan/Buang atau tekan "Subjek lain".`); }
 $('#bxAi').onclick = async () => {
@@ -1986,6 +1987,7 @@ $('#bxOk').onclick = async () => {
   $('#bxOk').disabled = false; bxMsg('');
 };
 $('#bBg').onclick = () => bxOpen(selLayer());
+$('#bxClean').onchange = () => { if (BX.ai) bxAiApply(); };
 
 // ===== Panel kanan gaya Photoroom: seksyen boleh lipat, Latar, Bayang, Garis tepi, Posisi =====
 S.open = S.open || { ch: true, pa: false, tbg: false, col: false, adj: false, ol: false, sh: false, tr: false, pos: false };
@@ -2313,15 +2315,42 @@ function fillHoles(label, w, h) {
   for (let x = 0; x < w; x++) { border.add(cc.lab[x]); border.add(cc.lab[(h - 1) * w + x]); } for (let y = 0; y < h; y++) { border.add(cc.lab[y * w]); border.add(cc.lab[y * w + w - 1]); }
   for (let i = 0; i < n; i++) { const l = cc.lab[i]; if (l && !border.has(l) && cc.sizes[l] < n * 0.015) label[i] = 1; }
 }
+// pembersihan warna: buang sisa latar (cth. lantai gelap) yang melekat di tepi label:
+// warnanya lain daripada bahagian dalam subjek DAN sempadannya tidak mengikut mana-mana garis tepi sebenar pada gambar
+function refineLabelByColour(label, data, w, h) {
+  const n = w * h, M = Math.max(w, h); let tot = 0; for (let i = 0; i < n; i++) tot += label[i]; if (tot < n * 0.01 || tot > n * 0.95) return 0;
+  const lab = BGXC.toLab(data, n), band = Math.max(6, Math.round(0.05 * M)), inn = BGXC.erode(label, w, h, band), fi = [];
+  for (let i = 0; i < n; i++) if (inn[i]) fi.push(i);
+  if (fi.length < 300) return 0;
+  const F = BGXC.kmeansColors(lab, fi, 5).filter(c => c.share > 0.02);
+  const dm = i => { let m = 1e9; for (const k of F) { const a = lab[i * 3] - k.c[0], b = lab[i * 3 + 1] - k.c[1], c = lab[i * 3 + 2] - k.c[2]; const d = Math.sqrt(a * a + b * b + c * c); if (d < m) m = d; } return m; };
+  const dd = (i, j) => { const a = lab[i * 3] - lab[j * 3], b = lab[i * 3 + 1] - lab[j * 3 + 1], c = lab[i * 3 + 2] - lab[j * 3 + 2]; return Math.sqrt(a * a + b * b + c * c); };
+  const st = 2, E = new Float32Array(n);
+  for (let y = st; y < h - st; y++) for (let x = st; x < w - st; x++) { const i = y * w + x; E[i] = (dd(i - st, i + st) > 25 || dd(i - st * w, i + st * w) > 25) ? 1 : 0; }
+  const Ed = BGXC.boxMean(E, w, h, 3), cand = new Uint8Array(n), weak = new Uint8Array(n);
+  for (let y = 1; y < h - 1; y++) for (let x = 1; x < w - 1; x++) { const i = y * w + x; if (!label[i]) continue; if (!inn[i] && dm(i) > 14) cand[i] = 1; if ((!label[i - 1] || !label[i + 1] || !label[i - w] || !label[i + w]) && Ed[i] < 0.01) weak[i] = 1; }
+  // tumbuh dari titik sempadan lemah ke piksel calon yang warnanya serupa (tidak melepasi garis tepi / warna lain)
+  const org = new Int32Array(n).fill(-1), q = new Int32Array(n); let qh = 0, qt = 0;
+  for (let i = 0; i < n; i++) if (weak[i] && cand[i]) { org[i] = i; q[qt++] = i; }
+  while (qh < qt) { const i = q[qh++], o = org[i], x = i % w; for (const j of [i - 1, i + 1, i - w, i + w]) { if (j < 0 || j >= n || org[j] >= 0 || !cand[j]) continue; if ((j === i - 1 && x === 0) || (j === i + 1 && x === w - 1)) continue; if (dd(j, o) > 16 || dd(j, i) > 9) continue; org[j] = o; q[qt++] = j; } }
+  const G = new Uint8Array(n); for (let i = 0; i < n; i++) G[i] = org[i] >= 0 ? 1 : 0;
+  const cc = BGXC.components(G, w, h), N = cc.sizes.length, wk = new Int32Array(N);
+  for (let i = 0; i < n; i++) if (G[i] && weak[i]) wk[cc.lab[i]]++;
+  const minA = Math.max(40, n * 0.0015); let rm = 0;
+  for (let i = 0; i < n; i++) if (G[i]) { const l = cc.lab[i]; if (cc.sizes[l] >= minA && wk[l] >= 15) { label[i] = 0; rm++; } }
+  return rm;
+}
 // label akhir: kawasan dikekalkan (+ matte potret jika ada)
-function segLabel(an, keep, A) {
+function segLabel(an, keep, A, data) {
   const { w, h, lab } = an, n = w * h, label = new Uint8Array(n); for (let i = 0; i < n; i++) if (lab[i] && keep.has(lab[i])) label[i] = 1;
   if (A) {
     const ab = new Uint8Array(n); for (let i = 0; i < n; i++) ab[i] = A[i] > 0.5 ? 1 : 0; const ac = BGXC.components(ab, w, h), ov = new Float64Array(ac.sizes.length); for (let i = 0; i < n; i++) if (ab[i] && label[i]) ov[ac.lab[i]]++;
     const person = new Uint8Array(n); let pa = 0, ma = 0; for (let i = 0; i < n; i++) { const l = ac.lab[i]; if (l && ov[l] > 0.3 * ac.sizes[l]) { person[i] = 1; pa++; } ma += label[i]; }
     if (pa >= 0.35 * ma && pa > 0) { const r = Math.max(2, Math.round(0.03 * Math.max(w, h))), dil = BGXC.boxMean(Float32Array.from(person), w, h, r); for (let i = 0; i < n; i++) label[i] = (person[i] || (label[i] && dil[i] > 0.02)) ? 1 : 0; }
   }
-  fillHoles(label, w, h); return label;
+  fillHoles(label, w, h);
+  const cl = $('#bxClean'); if (data && (!cl || cl.checked)) { try { if (refineLabelByColour(label, data, w, h)) fillHoles(label, w, h); } catch (e) { } }
+  return label;
 }
 // ======== Modal "Subjek Utama" (ketuk untuk pilih) ========
 async function msOpen(L) {
@@ -2362,7 +2391,7 @@ $('#msCancel').onclick = () => { hide('mMain'); MSX.P = null; MSX.lab = null; };
 $('#msOk').onclick = async () => {
   const L = MSX.L; if (!L || !MSX.keep.size) { toast('Pilih sekurang-kurangnya satu objek untuk dikekalkan', 1); return; } $('#msOk').disabled = true; msMsg('Menjana tepi halus…'); await tick();
   try {
-    const { w, h } = MSX, label = segLabel(MSX.an, MSX.keep, null), c = L.cv, fullI = { w: c.width, h: c.height, data: MSX.full.data }, al = BGXC.matte(fullI, label, w, h, { band: MSX.src === 'ai' ? 6 : 3, soft: 0.5, shrink: 0, hard: false }), img = BGXC.compose(fullI, al, {}), o = mk(img.width, img.height); o.getContext('2d').putImageData(img, 0, 0);
+    const { w, h } = MSX, label = segLabel(MSX.an, MSX.keep, null, MSX.data), c = L.cv, fullI = { w: c.width, h: c.height, data: MSX.full.data }, al = BGXC.matte(fullI, label, w, h, { band: MSX.src === 'ai' ? 6 : 3, soft: 0.5, shrink: 0, hard: false }), img = BGXC.compose(fullI, al, {}), o = mk(img.width, img.height); o.getContext('2d').putImageData(img, 0, 0);
     L.cv = o; L.name = L.name.replace(/ \(subjek utama\)$/, '') + ' (subjek utama)'; hide('mMain'); MSX.P = null; MSX.lab = null; refreshAll(); commit(); toast('Siap. Tidak tepat? Guna Buang Latar › AI Pintar untuk baiki dengan berus.');
   } catch (e) { toast('Gagal: ' + e.message, 1); }
   msMsg(''); $('#msOk').disabled = false;
