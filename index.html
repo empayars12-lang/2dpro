@@ -1,7 +1,7 @@
 <!doctype html>
-<html lang="ms"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1">
+<html lang="ms"><head><meta charset="utf-8"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="theme-color" content="#25262b"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,maximum-scale=1">
 <title>Pro Editor 2D</title>
-<meta name="app-version" content="1.4.0">
+<meta name="app-version" content="1.5.0">
 <style>:root{--bg:#1b1c20;--p1:#25262b;--p2:#2d2e34;--p3:#383a42;--ln:#41434c;--tx:#e8e9ee;--mu:#9a9ca8;--ac:#4c8dff;--ac2:#3a74da;--ok:#2fbf71;--no:#ef4f5f}
 *{box-sizing:border-box}html,body{height:100%;margin:0;background:var(--bg);color:var(--tx);font:13px/1.35 "Segoe UI",system-ui,Arial,sans-serif;overflow:hidden;user-select:none}
 button,select,input,textarea{font:inherit;color:inherit}
@@ -77,84 +77,89 @@ details.sec .car{transition:transform .15s;color:var(--mu)}details.sec[open] .ca
 
 #htSw .sw.on{outline:2px solid #6c8cff}#htPick.on{background:#3b4a8a}
 
-/* ===== Mod telefon ===== */
-#mnav,#mnMore,#sheetBar,.mOnly{display:none}
+/* ===== Mod telefon (gaya Photoroom) ===== */
+#mbar,#mtMenu,#mnFit,#sheetBar,.mOnly{display:none}
+.mlist{display:flex;flex-direction:column;gap:8px}.mlist button{text-align:left;padding:14px 14px;font-size:15px;border-radius:12px}
 #coach{position:fixed;inset:0;z-index:200;display:none}#coach.show{display:block}
 #coachHole{position:fixed;border:2px solid #6c8cff;border-radius:10px;box-shadow:0 0 0 9999px #000a;pointer-events:none;transition:all .2s;animation:pulse 1.4s infinite}
 @keyframes pulse{50%{border-color:#fff}}
 #coachCard{position:fixed;left:50%;transform:translateX(-50%);width:min(420px,94vw);background:var(--p2);border:1px solid var(--ln);border-radius:14px;padding:14px 16px;box-shadow:0 10px 40px #000c}
 #coachN{color:var(--mu);font-size:11px;margin-bottom:2px}#coachT{font-size:16px}#coachD{margin:6px 0 10px;line-height:1.5;font-size:13px}
 .hl2{font-weight:700;margin:10px 0 3px;color:#9db9ff}.hlp{margin:0;padding-left:18px;font-size:13px;line-height:1.55}.hlp li{margin:3px 0}
+/* Poster Pantas */
+.box.sp{width:560px;max-width:96vw}.sp input[type=text]{width:100%;margin:3px 0;padding:9px 10px}.sp-l{font-weight:700;margin:10px 0 3px;color:#9db9ff;font-size:12px;text-transform:uppercase;letter-spacing:.5px}
+.chips button.on{background:var(--ac);border-color:var(--ac2)}
+.spthemes{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.spt{height:58px;border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0;padding:2px;border:2px solid transparent}.spt b{font-size:20px;line-height:22px}.spt span{font-size:10px}.spt.on{border-color:#fff;box-shadow:0 0 0 2px var(--ac)}
+.spck{display:block;margin:6px 0;color:var(--mu)}
+.sws{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+@media (max-width:560px){.spthemes{grid-template-columns:repeat(4,1fr)}}
 body.mob{font-size:15px}
-body.mob html,body.mob{height:100dvh}
-body.mob #app{height:100dvh}
-body.mob #top{padding:4px 8px;gap:4px;min-height:46px}
-body.mob #top .brand,body.mob #top .tc,body.mob #bZout,body.mob #bZin,body.mob #bZ100,body.mob #zlbl,body.mob #bFit,body.mob #bSave,body.mob #bHelp,body.mob #bNew{display:none}
-body.mob #top .tl{gap:4px}body.mob #top .tr{gap:4px}
-body.mob #top button{min-height:38px;padding:4px 12px;font-size:14px}
-body.mob #bExport{padding:4px 14px}
-body.mob #main{flex-direction:column}
-body.mob #stage{order:0;flex:1;min-height:120px}
-body.mob #opts{order:2;display:none;overflow-x:auto;flex-wrap:nowrap;white-space:nowrap;padding:6px 10px;min-height:46px;-webkit-overflow-scrolling:touch}
-body.mob.hasopt #opts{display:flex}
-body.mob #opts .og{flex-wrap:nowrap}
-body.mob #opts button{min-height:36px;padding:4px 12px;font-size:13px}
-body.mob #opts input[type=range]{width:120px}
-body.mob #tools{order:1;display:none;flex-direction:row;width:100%;height:56px;border-right:0;border-top:1px solid var(--ln);overflow-x:auto;padding:6px 8px;gap:6px;justify-content:flex-start;-webkit-overflow-scrolling:touch}
+body.mob #app{position:fixed;left:0;top:var(--vvt,0px);width:100%;height:var(--vvh,100%);display:flex;flex-direction:column}
+body.mob #top{padding:4px 8px;gap:4px;min-height:48px;flex-wrap:nowrap;justify-content:space-between}
+body.mob #top .brand,body.mob #top .tc,body.mob #bZout,body.mob #bZin,body.mob #bZ100,body.mob #zlbl,body.mob #bFit,body.mob #bSave,body.mob #bHelp,body.mob #bNew,body.mob #bUpd{display:none}
+body.mob #mtMenu{display:inline-block;font-size:18px;padding:4px 12px}
+body.mob #top .tl,body.mob #top .tr{gap:6px}
+body.mob #top button{min-height:40px;min-width:40px;padding:4px 12px;font-size:15px}
+body.mob #bExport{padding:4px 16px;font-weight:600}
+body.mob #top{order:0}body.mob #main{order:1;flex-direction:column;position:relative;flex:1;min-height:0}
+body.mob #stage{order:0;flex:1;min-height:130px;position:relative}
+body.mob #mnFit{display:flex;position:absolute;right:10px;top:10px;z-index:5;width:40px;height:40px;border-radius:20px;padding:0;align-items:center;justify-content:center;background:#000a;font-size:18px}
+body.mob #tools{order:1;display:none;flex-direction:row;width:100%;height:58px;border-right:0;border-top:1px solid var(--ln);overflow-x:auto;padding:6px 8px;gap:6px;justify-content:flex-start;align-items:center;-webkit-overflow-scrolling:touch}
 body.mob.tools #tools{display:flex}
-body.mob #tools button{width:44px;height:44px;flex:none;font-size:19px}
-body.mob #tools .mOnly{display:flex}
+body.mob #tools button{width:44px;height:44px;flex:none;font-size:19px}body.mob #tools .mOnly{display:flex}
 body.mob #tools .cols{flex:none;margin:0 6px}body.mob #bSwap{flex:none;height:34px!important;width:34px!important;margin:0!important}
-body.mob #side{order:2;display:none;width:100%;height:46dvh;border-left:0;border-top:1px solid var(--ln);border-radius:16px 16px 0 0;box-shadow:0 -8px 24px #0006}
+body.mob #opts{order:2;display:none;overflow-x:auto;flex-wrap:nowrap;white-space:nowrap;padding:6px 10px;min-height:48px;-webkit-overflow-scrolling:touch}
+body.mob.hasopt #opts{display:flex}body.mob #opts .og{flex-wrap:nowrap}body.mob #opts button{min-height:38px;padding:4px 12px;font-size:13px}body.mob #opts input[type=range]{width:120px}
+body.mob #side{order:2;display:none;width:100%;height:auto;max-height:50%;flex:none;border-left:0;border-top:1px solid var(--ln);border-radius:18px 18px 0 0;box-shadow:0 -8px 28px #0007;min-height:0}
 body.mob.sheet #side{display:flex}
-body.mob #sheetBar{display:flex;align-items:center;gap:8px;padding:6px 12px;border-bottom:1px solid var(--ln);background:var(--p2);border-radius:16px 16px 0 0}
+body.mob #sheetBar{display:flex;align-items:center;gap:8px;padding:8px 14px 4px;position:relative;flex:none}
 body.mob #sheetBar i{position:absolute;left:50%;top:5px;width:38px;height:4px;margin-left:-19px;border-radius:2px;background:#5a5d68}
-body.mob #sheetBar b{flex:1;margin-top:6px}body.mob #sheetBar button{margin-top:6px;min-height:34px}
-body.mob #tabs{overflow-x:auto;-webkit-overflow-scrolling:touch}body.mob #tabs button{flex:none;padding:10px 14px;min-height:42px}body.mob #tabs .mOnly{display:block}
-body.mob #props{min-height:0;max-height:none}
-body.mob #side.m-layers #props,body.mob #side.m-layers #tabs~#props{display:none}
-body.mob #side:not(.m-layers) #layersWrap{display:none}
-body.mob #layersWrap{height:auto!important;flex:1;min-height:0}
-body.mob #side.m-layers #layersWrap{display:flex}
-body.mob .ly{padding:8px 8px}body.mob .ly canvas{width:44px;height:44px}body.mob .ly .ic{font-size:18px;padding:6px 8px}
-body.mob #lyBtns button{min-height:42px;font-size:16px}
-body.mob #mnav{display:flex;order:3;background:var(--p1);border-top:1px solid var(--ln);padding:4px 4px calc(4px + env(safe-area-inset-bottom));justify-content:space-around}
-body.mob #mnav button{flex:1;background:transparent;border:0;display:flex;flex-direction:column;align-items:center;gap:1px;padding:4px 2px;font-size:10.5px;min-width:0;border-radius:10px;color:var(--tx)}
-body.mob #mnav button i{font-style:normal;font-size:20px;line-height:24px}body.mob #mnav button.on{background:var(--p3);color:#9db9ff}
-body.mob #status{display:none}
-body.mob #mnMore{display:flex;position:absolute;left:8px;top:58px;z-index:20;gap:6px}
-body.mob #mnMore button{background:#000a;min-height:38px;min-width:38px;border-radius:19px;padding:0 12px;backdrop-filter:blur(6px)}
-body.mob #stage{position:relative}
-body.mob #toast{bottom:90px}
-body.mob input,body.mob select,body.mob textarea{font-size:16px;min-height:38px}
-body.mob input[type=range]{min-height:30px}
-body.mob input[type=color]{width:40px;height:36px}
-body.mob .row>label{width:70px}
-body.mob .row.btns button,body.mob .chips button{min-height:38px}
-body.mob details.sec summary{padding:13px 12px}
-body.mob .tg{width:46px;height:26px}
+body.mob #sheetBar b{flex:1;margin-top:6px;font-size:15px}body.mob #sheetBar button{margin-top:4px;min-height:36px;border-radius:18px;padding:0 14px}
+body.mob #tabs{display:none}
+body.mob #props{flex:1;min-height:0;max-height:none;overflow:auto;padding:6px 12px 10px;-webkit-overflow-scrolling:touch;border-bottom:0}
+body.mob #props h4{display:none}
+body.mob #side.m-layers #props{display:none}body.mob #side:not(.m-layers) #layersWrap{display:none}
+body.mob #layersWrap{height:auto!important;flex:1;min-height:150px;padding:6px 12px 10px}body.mob #layersHead{display:none}
+body.mob .ly{padding:8px}body.mob .ly canvas{width:46px;height:46px}body.mob .ly .ic{font-size:19px;padding:8px 10px}
+body.mob #lyBtns button{min-height:44px;font-size:17px}
+body.mob #mbar{display:flex;order:3;flex:none;background:var(--p1);border-top:1px solid var(--ln);padding:6px 4px calc(6px + env(safe-area-inset-bottom));gap:2px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+body.mob #mbar::-webkit-scrollbar{display:none}
+body.mob #mbar button{flex:0 0 auto;min-width:66px;background:transparent;border:0;display:flex;flex-direction:column;align-items:center;gap:2px;padding:5px 6px;font-size:11px;border-radius:12px;color:var(--tx);white-space:nowrap}
+body.mob #mbar button i{font-style:normal;font-size:22px;line-height:26px}
+body.mob #mbar button.on{background:var(--p3);color:#9db9ff}body.mob #mbar button.hl{color:#9db9ff}body.mob #mbar button.hl i{filter:drop-shadow(0 0 6px #4c8dff88)}
+body.mob #mbar button.ok{background:var(--ac);color:#fff;border-radius:12px}
+body.mob #status{display:none}body.mob #toast{bottom:96px}
+body.mob input,body.mob select,body.mob textarea{font-size:16px;min-height:40px}
+body.mob input[type=range]{min-height:32px}body.mob input[type=color]{width:44px;height:40px}
+body.mob input[type=checkbox]{width:22px;height:22px;min-height:0}
+body.mob .row{margin:7px 0}body.mob .row>label{width:72px}
+body.mob .row.btns button,body.mob .chips button{min-height:40px}
+body.mob .sws i{width:36px;height:36px;border-radius:50%}
+body.mob details.sec{margin:0 0 6px;border:0;background:transparent}body.mob details.sec>summary{padding:8px 2px}body.mob details.sec .sb{padding:0 2px 8px}
+body.mob .tg{width:48px;height:28px}
+body.mob #tText{height:90px}
 body.mob .modal{align-items:flex-end}
-body.mob .box{min-width:0;width:100%!important;max-width:100vw;border-radius:16px 16px 0 0;max-height:92dvh;padding:14px 14px calc(14px + env(safe-area-inset-bottom))}
-body.mob #welcome{align-items:center}body.mob #welcome .box{border-radius:16px;width:92vw!important;min-width:0}
-body.mob #welcome .big{flex-wrap:wrap}body.mob #welcome .big button{flex:1;min-width:130px}
-body.mob #bx .box{width:100vw!important;height:100dvh;max-height:100dvh;border-radius:0}
-body.mob #bx .bxm{flex-direction:column}body.mob #bxTools{flex-direction:row;width:100%;overflow-x:auto;flex:none}body.mob #bxTools button{flex:none;min-width:64px;min-height:42px}
-body.mob #bxStage{min-height:200px;flex:1}body.mob #bxSide{width:100%;max-height:34dvh;flex:none}
-body.mob #mHt .box,body.mob #mEnh .box{height:100dvh;max-height:100dvh;border-radius:0}
-body.mob #htStage{height:34dvh!important}
-body.mob #htSw .sw{min-height:34px}
-body.mob #mFont .box{height:92dvh}body.mob #fpList{height:62dvh}
-body.mob .grid{grid-template-columns:repeat(4,1fr)}body.mob .grid button{height:60px}
-body.mob .cards{grid-template-columns:1fr}
+body.mob .box{min-width:0;width:100%!important;max-width:100vw;border-radius:18px 18px 0 0;max-height:94%;padding:14px 14px calc(14px + env(safe-area-inset-bottom))}
+body.mob #welcome{align-items:center}body.mob #welcome .box{border-radius:18px;width:92vw!important;min-width:0}
+body.mob #welcome .big{flex-wrap:wrap}body.mob #welcome .big button{flex:1;min-width:130px;min-height:46px}
+body.mob #bx .box{width:100vw!important;height:var(--vvh,100%);max-height:none;border-radius:0}
+body.mob #bx .bxm{flex-direction:column}body.mob #bxTools{flex-direction:row;width:100%;overflow-x:auto;flex:none}body.mob #bxTools button{flex:none;min-width:64px;min-height:44px}
+body.mob #bxStage{min-height:180px;flex:1}body.mob #bxSide{width:100%;max-height:36%;flex:none}
+body.mob #mHt .box,body.mob #mEnh .box,body.mob #mSmart .box{height:var(--vvh,100%);max-height:none;border-radius:0}
+body.mob #htStage{height:34vh!important}body.mob #htSw .sw{min-height:36px}
+body.mob #mFont .box{height:92%}body.mob #fpList{height:62vh}
+body.mob .grid{grid-template-columns:repeat(4,1fr)}body.mob .grid button{height:60px}body.mob .cards{grid-template-columns:1fr}
 body.mob #stage,body.mob #bxStage,body.mob #htStage{touch-action:none}
-body.mob button,body.mob .tb,body.mob .sw{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+body.mob button,body.mob .sw{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 body.mob *{-webkit-touch-callout:none}
+#htSw .sw.on{outline:2px solid #6c8cff}#htPick.on{background:#3b4a8a}
+.sp .ft{position:sticky;bottom:-14px;background:var(--p2);padding:10px 0 4px;margin-top:10px;z-index:3}
 </style></head><body>
 <div id="app">
 <header id="top">
-  <div class="tl"><span class="brand">Pro <b>Editor 2D</b></span><button id="bNew" title="Dokumen baru">Baru</button><button id="bUndo" title="Ctrl+Z">↶</button><button id="bRedo" title="Ctrl+Y">↷</button></div>
+  <div class="tl"><button id="mtMenu" title="Menu">☰</button><span class="brand">Pro <b>Editor 2D</b></span><button id="bNew" title="Dokumen baru">Baru</button><button id="bUndo" title="Ctrl+Z">↶</button><button id="bRedo" title="Ctrl+Y">↷</button></div>
   <div class="tc">
-    <button class="tb" id="bOpen"><i>＋</i>Sisip</button><button class="tb" id="bText"><i>Aa</i>Teks</button><button class="tb" id="bTpl"><i>▤</i>Templat</button><button class="tb" id="bBgs"><i>▦</i>Latar</button><button class="tb" id="bShadow"><i>◐</i>Bayang</button><button class="tb" id="bSize"><i>⤢</i>Saiz</button>
+    <button class="tb hl" id="bSmart" title="Jana poster automatik"><i>✨</i>Poster Pantas</button><button class="tb" id="bOpen"><i>＋</i>Sisip</button><button class="tb" id="bText"><i>Aa</i>Teks</button><button class="tb" id="bTpl"><i>▤</i>Templat</button><button class="tb" id="bBgs"><i>▦</i>Latar</button><button class="tb" id="bShadow"><i>◐</i>Bayang</button><button class="tb" id="bSize"><i>⤢</i>Saiz</button>
     <span class="vsep"></span>
     <button class="tb hl" id="bBg" title="Buang latar belakang"><i>✂</i>Buang Latar</button><button class="tb" id="bEnh" title="Besarkan &amp; tajamkan"><i>✨</i>Kualiti</button><button class="tb" id="bAdj"><i>🎚</i>Laras</button><button class="tb" id="bTrim" title="Potong ruang lutsinar"><i>⌗</i>Trim</button><button class="tb hl" id="bHt" title="Halftone untuk DTF"><i>⁘</i>Halftone</button>
   </div>
@@ -185,7 +190,7 @@ body.mob *{-webkit-touch-callout:none}
     <div class="cols"><input type="color" class="b" id="cBk" value="#ffffff"><input type="color" class="f" id="cFg" value="#000000"></div>
     <button id="bSwap" title="Tukar warna (X)" style="width:30px;height:24px;font-size:12px;margin-top:2px">⇄</button>
   </nav>
-  <div id="stage"><canvas id="cv"></canvas></div>
+  <div id="stage"><canvas id="cv"></canvas></div><button id="mnFit" title="Muat skrin">⤢</button>
   <aside id="side"><div id="sheetBar"><i></i><b id="sheetT">Panel</b><button id="sheetX">✕ Tutup</button></div>
     <div id="tabs"><button data-tab="props" class="on">Sifat</button><button data-tab="layers" class="mOnly">Lapisan</button><button data-tab="elems">Elemen</button><button data-tab="tpl">Templat</button><button data-tab="bg">Latar</button></div>
     <div id="props"></div>
@@ -196,9 +201,20 @@ body.mob *{-webkit-touch-callout:none}
   </aside>
 </div>
 <footer id="status"><span id="sDoc">Tiada dokumen</span><span id="sPos"></span><span id="sSel"></span><span style="flex:1"></span><span id="sSave"></span></footer>
+<nav id="mbar"></nav>
 </div>
-<nav id="mnav"><button id="mnAdd"><i>🖼</i>Gambar</button><button id="mnText"><i>Aa</i>Teks</button><button id="mnTpl"><i>▤</i>Templat</button><button id="mnBg"><i>✂</i>Buang Latar</button><button id="mnTools"><i>🛠</i>Alat</button><button id="mnPanel"><i>☰</i>Panel</button></nav>
-<div id="mnMore"><button id="mnNew">＋ Baru</button><button id="mnSave">💾</button><button id="mnUndo">↶</button><button id="mnRedo">↷</button><button id="mnFit">Muat</button><button id="mnHelp">?</button></div>
+<div class="modal" id="mMenu"><div class="box"><h3>Menu</h3><div class="mlist">
+<button id="mmSmart">✨ Poster Pantas (jana automatik)</button><button id="mmNew">＋ Dokumen baru</button><button id="mmOpen">🖼 Buka gambar / projek</button><button id="mmSave">💾 Simpan projek</button><button id="mmSize">⤢ Saiz kanvas</button><button id="mmTools">🛠 Alat lukis &amp; pilih</button><button id="mmHelp">? Panduan &amp; cara guna</button></div><div class="ft"><button id="mmClose">Tutup</button></div></div></div>
+<div class="modal" id="mSmart"><div class="box sp"><h3>✨ Poster Pantas</h3><div class="hint" style="margin:0 0 6px">Isi maklumat, pilih tema — poster siap dengan teks, harga &amp; butang. Semua boleh diedit selepas itu.</div>
+<div class="sp-l">Format</div><div class="chips" id="spFmt"></div>
+<div class="sp-l">Tema warna</div><div class="spthemes" id="spTh"></div>
+<div class="sp-l">Susun atur</div><div class="chips" id="spLay"></div>
+<div class="sp-l">Kandungan</div>
+<input type="text" id="spHead" placeholder="Tajuk — cth: PROMO RAYA"><input type="text" id="spSub" placeholder="Sub tajuk — cth: Tempahan dibuka sekarang"><input type="text" id="spPrice" placeholder="Harga — cth: RM 29.90"><input type="text" id="spCta" placeholder="Butang — cth: TEMPAH SEKARANG"><input type="text" id="spInfo" placeholder="Telefon / alamat — cth: 012-345 6789">
+<div class="row"><button id="spPhoto">📷 Foto produk</button><span id="spPhN" style="color:var(--mu);font-size:12px;flex:1.4"></span></div>
+<label class="spck"><input type="checkbox" id="spCut" checked> Buang latar foto secara automatik</label>
+<div class="ft"><button id="spCancel">Batal</button><button id="spRand">🔀 Rawak</button><button class="pri" id="spGo">Jana poster</button></div></div></div>
+<input type="file" id="spFile" accept="image/*" hidden>
 <div class="modal" id="mHelp"><div class="box" style="width:520px;max-width:96vw"><h3>Panduan — buat flyer &amp; poster</h3>
 <div class="hl2">Gerak isyarat</div><ul class="hlp"><li><b>1 jari</b> pada objek = alih. Tarik <b>kotak sudut</b> = besar/kecil, <b>bulatan atas</b> = putar.</li><li><b>2 jari</b> = cubit untuk zum, seret untuk gerak paparan (sentiasa boleh).</li><li><b>Ketuk 2×</b> pada teks = edit tulisan.</li><li><b>Ketuk kawasan kosong</b> = nyahpilih.</li></ul>
 <div class="hl2">Resipi flyer 5 minit</div><ol class="hlp"><li><b>Baru</b> → pilih saiz (Story/TikTok 1080×1920, FB 1080×1350, atau A4 300 dpi untuk cetak).</li><li><b>Templat</b> → pilih susun atur, atau <b>Latar</b> → warna / gradien.</li><li><b>Gambar</b> → masukkan produk. <b>Buang Latar</b> → pilih kaedah.</li><li><b>Teks</b> → tulis tajuk. Di <b>Panel › Sifat</b>: fon, saiz, warna, lengkung, garis tepi, bayang.</li><li><b>Panel › Elemen</b> → bentuk, jalur harga, butang. <b>Panel › Lapisan</b> → ▲▼ untuk susun atas/bawah.</li><li><b>Muat turun</b> → PNG (jelas) atau JPG (kecil untuk FB/TikTok).</li></ol>
@@ -209,7 +225,7 @@ body.mob *{-webkit-touch-callout:none}
 
 <div class="modal show" id="welcome"><div class="box"><h3>Pro Editor 2D</h3>
   <div style="color:var(--mu)">Editor imej 2D gaya Photoshop — lapisan, teks, berus, buang latar pintar, tingkatkan kualiti. Semua berjalan dalam pelayar, tanpa muat naik.</div>
-  <div class="big"><button class="pri" id="wNew">Dokumen baru</button><button id="wHelp">? Panduan</button><button id="wOpen">Buka gambar…</button><button id="wResume" style="display:none">Sambung kerja terakhir</button></div>
+  <div class="big"><button class="pri" id="wNew">Dokumen baru</button><button id="wHelp">? Panduan</button><button class="pri" id="wSmart">✨ Poster Pantas</button><button id="wOpen">Buka gambar…</button><button id="wResume" style="display:none">Sambung kerja terakhir</button></div>
   <div class="hint">Tip: seret &amp; lepas gambar ke mana-mana, atau tampal (Ctrl+V).</div></div></div>
 
 <div class="modal" id="mNew"><div class="box"><h3>Dokumen baru</h3>
@@ -2160,38 +2176,142 @@ $('#htOk').onclick = async () => {
 };
 $('#bHt').onclick = () => htOpen(selLayer());
 
-// ===== Mod telefon: bar bawah, panel gelongsor, cubit-zum, panduan =====
+// ===== Poster Pantas: jana poster iklan automatik (semua lapisan boleh diedit) =====
+const SP_FMT = [['Post 4:5 (IG/FB)', 1080, 1350, 72], ['Persegi 1:1', 1080, 1080, 72], ['Story/TikTok 9:16', 1080, 1920, 72], ['FB mendatar', 1200, 630, 72], ['Poster A4', 2480, 3508, 300]];
+const SP_TH = {
+  'Panas': { bg: ['#ff512f', '#dd2476'], ink: '#ffffff', acc: '#ffe000', acc2: '#ffb300', onAcc: '#1a1a1a', head: 'Anton', hb: false, body: 'Poppins' },
+  'Segar': { bg: ['#11998e', '#38ef7d'], ink: '#ffffff', acc: '#ffffff', acc2: '#e0fff0', onAcc: '#0b6b4f', head: 'Poppins', hb: true, body: 'Poppins' },
+  'Mewah': { bg: ['#0c0c0d', '#2b2b2f'], ink: '#f5e6b8', acc: '#d4af37', acc2: '#f7e08a', onAcc: '#111111', head: 'Playfair Display', hb: true, body: 'Montserrat' },
+  'Neon': { bg: ['#0b0b1a', '#26104a'], ink: '#ffffff', acc: '#ff2bd6', acc2: '#00e5ff', onAcc: '#ffffff', head: 'Bebas Neue', hb: false, body: 'Poppins', glow: true },
+  'Bersih': { bg: ['#ffffff', '#e6edf9'], ink: '#14213d', acc: '#2563eb', acc2: '#60a5fa', onAcc: '#ffffff', head: 'Poppins', hb: true, body: 'Poppins' },
+  'Pastel': { bg: ['#ffe5d9', '#ffc8dd'], ink: '#5a2a3a', acc: '#e5446d', acc2: '#ff8fa3', onAcc: '#ffffff', head: 'Fredoka', hb: true, body: 'Poppins' },
+  'Raya': { bg: ['#064e3b', '#0f766e'], ink: '#fef3c7', acc: '#fbbf24', acc2: '#f59e0b', onAcc: '#064e3b', head: 'Playfair Display', hb: true, body: 'Montserrat' },
+  'Biru': { bg: ['#1e3a8a', '#3b82f6'], ink: '#ffffff', acc: '#fde047', acc2: '#facc15', onAcc: '#1e3a8a', head: 'Oswald', hb: true, body: 'Poppins' }
+};
+const SP_LAY = [['auto', 'Auto'], ['A', 'Tengah'], ['B', 'Panel bawah'], ['C', 'Letupan']];
+let SP = { fmt: 0, theme: 'Panas', layout: 'auto', head: '', sub: '', price: '', cta: '', info: '', cut: true, photo: null, photoName: '' };
+try { Object.assign(SP, JSON.parse(localStorage.getItem('pe2d_sp') || '{}'), { photo: null, photoName: '' }); } catch (_) { }
+function spSave() { try { const o = Object.assign({}, SP); delete o.photo; localStorage.setItem('pe2d_sp', JSON.stringify(o)); } catch (_) { } }
+function spUI() {
+  const f = $('#spFmt'); f.innerHTML = ''; SP_FMT.forEach((x, i) => { const b = document.createElement('button'); b.textContent = x[0]; b.className = i === SP.fmt ? 'on' : ''; b.onclick = () => { SP.fmt = i; spUI(); }; f.appendChild(b); });
+  const t = $('#spTh'); t.innerHTML = ''; Object.entries(SP_TH).forEach(([k, v]) => { const b = document.createElement('button'); b.className = 'spt' + (k === SP.theme ? ' on' : ''); b.style.background = `linear-gradient(135deg,${v.bg[0]},${v.bg[1]})`; b.innerHTML = `<b style="color:${v.acc}">Aa</b><span style="color:${v.ink}">${k}</span>`; b.onclick = () => { SP.theme = k; spUI(); }; t.appendChild(b); });
+  const l = $('#spLay'); l.innerHTML = ''; SP_LAY.forEach(([k, n]) => { const b = document.createElement('button'); b.textContent = n; b.className = k === SP.layout ? 'on' : ''; b.onclick = () => { SP.layout = k; spUI(); }; l.appendChild(b); });
+  $('#spPhN').textContent = SP.photoName || 'Belum dipilih (pilihan)';
+}
+function spRead() { ['head', 'sub', 'price', 'cta', 'info'].forEach(k => SP[k] = $('#sp' + k[0].toUpperCase() + k.slice(1)).value.trim()); SP.cut = $('#spCut').checked; }
+function openSmart() { ['head', 'sub', 'price', 'cta', 'info'].forEach(k => $('#sp' + k[0].toUpperCase() + k.slice(1)).value = SP[k]); $('#spCut').checked = SP.cut; spUI(); show('mSmart'); }
+$('#spPhoto').onclick = () => $('#spFile').click();
+$('#spFile').onchange = async e => {
+  const f = e.target.files[0]; if (!f) return; const u = URL.createObjectURL(f), im = new Image(); im.src = u; try { await im.decode(); } catch (_) { toast('Gambar tidak boleh dibaca', 1); return; }
+  const k = Math.min(1, 1800 / Math.max(im.naturalWidth, im.naturalHeight)), c = mk(Math.round(im.naturalWidth * k), Math.round(im.naturalHeight * k)); c.getContext('2d').drawImage(im, 0, 0, c.width, c.height); URL.revokeObjectURL(u); SP.photo = c; SP.photoName = f.name; e.target.value = ''; spUI();
+};
+$('#spCancel').onclick = () => hide('mSmart');
+$('#spGo').onclick = () => spGenerate(false); $('#spRand').onclick = () => spGenerate(true);
+function fitText(L, maxW, maxH) { const ok = z => { L.t.size = z; reText(L); return L.cv.width * Math.abs(L.sx) <= maxW * 1.1 && L.cv.height * Math.abs(L.sy) <= maxH * 1.03; }; let hi = L.t.size, lo = 10, best = 10; if (ok(hi)) return; for (let i = 0; i < 11; i++) { const mid = Math.floor((lo + hi) / 2); if (mid <= lo) break; if (ok(mid)) { best = mid; lo = mid; } else hi = mid; } L.t.size = best; reText(L); }
+async function spFonts(names) { try { await Promise.race([loadGoogleFonts(), new Promise(r => setTimeout(r, 5000))]); await Promise.race([Promise.all(names.flatMap(n => [document.fonts.load(`400 40px "${n}"`, 'Aa'), document.fonts.load(`700 40px "${n}"`, 'Aa')])), new Promise(r => setTimeout(r, 4000))]); } catch (_) { } }
+async function spGenerate(rand) {
+  spRead(); if (rand) { SP.theme = Object.keys(SP_TH)[Math.floor(Math.random() * 8)]; SP.layout = ['A', 'B', 'C'][Math.floor(Math.random() * 3)]; } spSave();
+  const [, W, H, dpi] = SP_FMT[SP.fmt], th = SP_TH[SP.theme]; $('#spGo').disabled = true; $('#spRand').disabled = true; toast('Menjana poster…'); await tick();
+  try {
+    await spFonts([th.head, th.body]); newDoc(W, H, dpi, th.bg[0]); const w = S.w, h = S.h, m = Math.min(w, h), land = w > h * 1.25; let lay = SP.layout === 'auto' ? (land ? 'H' : 'A') : (land ? 'H' : SP.layout);
+    const head = SP.head || 'PROMO ISTIMEWA', cta = SP.cta || 'TEMPAH SEKARANG';
+    const T = (s, x, y, size, o, maxW, maxH) => { const L = addText(x, y, Object.assign({ text: s, size: Math.round(size), font: th.body, color: th.ink, bold: true }, o)); fitText(L, maxW || w * 0.9, maxH || h * 0.2); L.x = x; L.y = y; return L; };
+    const SH = (L, s) => { L.fx.sh = Object.assign({ on: true }, s); return L; };
+    const HEAD = (x, y, bw, mh, col) => { const L = T(head, x, y, m * 0.13, { font: th.head, bold: th.hb, color: col || th.ink, upper: true, boxW: Math.round(bw), lh: 1.05, ls: th.head === 'Bebas Neue' || th.head === 'Anton' ? 2 : 0 }, bw, mh); if (th.glow) SH(L, { color: th.acc, blur: 30, dx: 0, dy: 0 }); return L; };
+    const bg = addShape('rect', { w, h, fill: th.bg[0], g2: th.bg[1], ga: 90 }); bg.name = 'Latar'; bg.x = w / 2; bg.y = h / 2;
+    const deco = (x, y, s, f, g) => { const L = addShape('ellipse', { w: s, h: s, fill: f, g2: g || '' }); L.x = x; L.y = y; L.op = 0.9; L.name = 'Hiasan'; return L; };
+    let pbox, pc, priceXY, ctaY, headBox;
+    if (lay === 'H') { deco(w * 0.27, h * 0.52, h * 0.95, th.acc, th.acc2); pbox = [w * 0.27, h * 0.5, w * 0.46, h * 0.8]; HEAD(w * 0.72, h * 0.27, w * 0.44, h * 0.3); if (SP.sub) T(SP.sub, w * 0.72, h * 0.46, h * 0.07, { bold: false, boxW: Math.round(w * 0.42) }, w * 0.44, h * 0.14); if (SP.price) { const p = addShape('burst', { w: h * 0.34, h: h * 0.34, fill: th.acc, g2: th.acc2 }); p.x = w * 0.9; p.y = h * 0.62; p.name = 'Lencana harga'; T(SP.price, w * 0.9, h * 0.62, h * 0.07, { color: th.onAcc }, h * 0.26, h * 0.12); } T(cta, w * 0.72, h * 0.8, h * 0.06, { bgOn: true, bgC: th.acc, color: th.onAcc, bgPad: 0.45, bgR: 0.5 }, w * 0.42, h * 0.14); if (SP.info) T(SP.info, w * 0.72, h * 0.93, h * 0.04, { bold: false }, w * 0.44, h * 0.07); }
+    else if (lay === 'B') { pbox = [w / 2, h * 0.32, w * 0.84, h * 0.46]; deco(w * 0.5, h * 0.34, m * 0.78, th.acc2, th.acc).op = 0.35; const p = addShape('rrect', { w: w * 1.04, h: h * 0.4, fill: th.acc, g2: th.acc2, ga: 0 }); p.x = w / 2; p.y = h * 0.8; p.name = 'Panel'; HEAD(w / 2, h * 0.68, w * 0.86, h * 0.14, th.onAcc); if (SP.sub) T(SP.sub, w / 2, h * 0.755, m * 0.04, { color: th.onAcc, bold: false, boxW: Math.round(w * 0.8) }, w * 0.86, h * 0.06); if (SP.price) T(SP.price, w / 2, h * 0.835, m * 0.11, { color: th.onAcc, font: th.head, bold: th.hb }, w * 0.8, h * 0.1); T(cta, w / 2, h * 0.915, m * 0.045, { bgOn: true, bgC: th.onAcc, color: th.acc, bgPad: 0.45, bgR: 0.5 }, w * 0.8, h * 0.07); if (SP.info) T(SP.info, w / 2, h * 0.968, m * 0.032, { color: th.onAcc, bold: false }, w * 0.86, h * 0.04); }
+    else if (lay === 'C') { const b = addShape('burst', { w: m * 0.85, h: m * 0.85, fill: th.acc, g2: th.acc2 }); b.x = w / 2; b.y = h * 0.27; b.name = 'Letupan'; HEAD(w / 2, h * 0.27, m * 0.54, m * 0.36, th.onAcc); pbox = [w / 2, h * 0.675, w * 0.8, h * 0.26]; if (SP.sub) T(SP.sub, w / 2, h * 0.5, m * 0.045, { bold: false, boxW: Math.round(w * 0.8) }, w * 0.86, h * 0.07); if (SP.price) { const p = addShape('rrect', { w: w * 0.5, h: h * 0.1, fill: th.acc, g2: th.acc2 }); p.x = w * 0.72; p.y = h * 0.79; p.name = 'Lencana harga'; p.rot = -6; T(SP.price, w * 0.72, h * 0.79, m * 0.08, { color: th.onAcc, font: th.head, bold: th.hb }, w * 0.44, h * 0.08).rot = -6; } T(cta, w / 2, h * 0.9, m * 0.05, { bgOn: true, bgC: th.acc, color: th.onAcc, bgPad: 0.45, bgR: 0.5 }, w * 0.8, h * 0.08); if (SP.info) T(SP.info, w / 2, h * 0.968, m * 0.032, { bold: false }, w * 0.86, h * 0.04); }
+    else { deco(w * 0.5, h * 0.5, m * 0.82, th.acc, th.acc2).op = 0.95; pbox = [w / 2, h * 0.5, w * 0.78, h * 0.36]; HEAD(w / 2, h * 0.13, w * 0.86, h * 0.2); if (SP.sub) T(SP.sub, w / 2, h * 0.265, m * 0.045, { bold: false, boxW: Math.round(w * 0.8) }, w * 0.86, h * 0.07); if (SP.price) { const p = addShape('burst', { w: m * 0.3, h: m * 0.3, fill: th.acc, g2: th.acc2 }); p.x = w * 0.8; p.y = h * 0.68; p.name = 'Lencana harga'; T(SP.price, w * 0.8, h * 0.68, m * 0.06, { color: th.onAcc, font: th.head, bold: th.hb }, m * 0.22, m * 0.1); } T(cta, w / 2, h * 0.88, m * 0.05, { bgOn: true, bgC: th.acc, color: th.onAcc, bgPad: 0.45, bgR: 0.5 }, w * 0.8, h * 0.08); if (SP.info) T(SP.info, w / 2, h * 0.95, m * 0.034, { bold: false }, w * 0.86, h * 0.05); }
+    if (SP.photo) {
+      const c = mk(SP.photo.width, SP.photo.height); c.getContext('2d').drawImage(SP.photo, 0, 0); const P = newLayer('img', c, 'Produk', { x: pbox[0], y: pbox[1] }); addLayer(P);
+      if (SP.cut) { await quickCut(P); S.sel = P.id; trimLayer(); }
+      const k = Math.min(pbox[2] / P.cv.width, pbox[3] / P.cv.height); P.sx = P.sy = k; P.x = pbox[0]; P.y = pbox[1]; SH(P, { color: '#00000077', blur: Math.round(m * 0.04), dx: 0, dy: Math.round(m * 0.02) });
+      // letak produk di bawah teks tetapi di atas hiasan
+      const idx = S.layers.indexOf(P); S.layers.splice(idx, 1); const firstTxt = S.layers.findIndex(l => l.kind === 'text' || l.name === 'Lencana harga'); S.layers.splice(firstTxt < 0 ? S.layers.length : firstTxt, 0, P);
+    }
+    S.sel = null; if (S.hist.length > 2) { const first = S.hist[0]; S.hist = [first]; S.hi = 0; } commit(); hide('mSmart'); fitView(); refreshAll(); toast('Siap! Ketuk mana-mana bahagian untuk edit. Tekan 🔀 untuk variasi lain.');
+  } catch (e) { console.error(e); toast('Gagal menjana: ' + e.message, 1); }
+  $('#spGo').disabled = false; $('#spRand').disabled = false;
+}
+$('#bSmart') && ($('#bSmart').onclick = openSmart);
+
+// ===== Mod telefon gaya Photoroom: bar bawah kontekstual, panel mini, cubit-zum, panduan =====
 const MQ = matchMedia('(max-width:860px), (pointer:coarse) and (max-width:1100px)');
 const IOS = /iP(hone|ad|od)/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
-function isMob() { return document.body.classList.contains('mob'); }
-function fitIfFit(fn) { const r = stage.getBoundingClientRect(); const fz = S.w ? Math.min((r.width - 60) / S.w, (r.height - 60) / S.h) : 1, was = S.w && Math.abs(S.z - clamp(fz, 0.02, 8)) / S.z < 0.02; fn(); requestAnimationFrame(() => { if (S.w && was) fitView(); else if (S.w) redraw(); }); }
-function applyMob() { document.body.classList.toggle('mob', MQ.matches); if (!MQ.matches) { document.body.classList.remove('sheet', 'tools'); } requestAnimationFrame(() => { sizeCanvas(); if (S.w) fitView(); }); }
+const isMob = () => document.body.classList.contains('mob');
+function vv() { const v = window.visualViewport, r = document.documentElement.style; r.setProperty('--vvh', (v ? v.height : innerHeight) + 'px'); r.setProperty('--vvt', (v ? v.offsetTop : 0) + 'px'); }
+if (window.visualViewport) { visualViewport.addEventListener('resize', vv); visualViewport.addEventListener('scroll', () => { vv(); if (isMob()) scrollTo(0, 0); }); } addEventListener('resize', vv); vv();
+function fitIfFit(fn) { const r = stage.getBoundingClientRect(); const fz = S.w ? Math.min((r.width - 60) / S.w, (r.height - 60) / S.h) : 1, was = S.w && Math.abs(S.z - clamp(fz, 0.02, 8)) / S.z < 0.03; fn(); setTimeout(() => { sizeCanvas(); if (S.w && was) fitView(); else if (S.w) redraw(); }, 60); }
+function applyMob() { document.body.classList.toggle('mob', MQ.matches); if (!MQ.matches) document.body.classList.remove('sheet', 'tools', 'hasopt'); vv(); setTimeout(() => { sizeCanvas(); if (S.w) fitView(); mbarRender(); }, 50); }
 MQ.addEventListener ? MQ.addEventListener('change', applyMob) : MQ.addListener(applyMob);
-const SHEET_T = { props: 'Sifat', elems: 'Elemen', tpl: 'Templat', bg: 'Latar', layers: 'Lapisan' };
-function sheet(tab) {
-  if (!isMob()) { if (tab && tab !== 'layers') { S.tab = tab; renderProps(); } return; }
-  fitIfFit(() => { document.body.classList.remove('tools'); document.body.classList.add('sheet'); if (tab) { S.tab = tab; $('#side').classList.toggle('m-layers', tab === 'layers'); renderProps(); $('#sheetT').textContent = SHEET_T[tab] || 'Panel'; } mnMark(); });
+// ---- panel (helaian bawah) ----
+let MS = { tab: 'props', sec: null, keep: null, custom: null, id: '' };
+function openSheet(title, o) {
+  MS = Object.assign({ tab: 'props', sec: null, keep: null, custom: null, id: '' }, o || {}); S.tab = MS.tab;
+  fitIfFit(() => { document.body.classList.remove('tools'); document.body.classList.add('sheet'); $('#side').classList.toggle('m-layers', MS.tab === 'layers'); $('#sheetT').textContent = title; renderProps(); mbarRender(); });
 }
-function closeSheet() { fitIfFit(() => { document.body.classList.remove('sheet'); mnMark(); }); }
-function mnMark() { const sh = document.body.classList.contains('sheet'), tl = document.body.classList.contains('tools'); $('#mnPanel').classList.toggle('on', sh); $('#mnTools').classList.toggle('on', tl); $('#mnTpl').classList.toggle('on', sh && S.tab === 'tpl'); }
-$$('#tabs [data-tab]').forEach(b => b.addEventListener('click', () => { $('#side').classList.toggle('m-layers', b.dataset.tab === 'layers'); $('#sheetT').textContent = SHEET_T[b.dataset.tab] || 'Panel'; mnMark(); }));
-$('#sheetX').onclick = closeSheet;
-$('#mnPanel').onclick = () => document.body.classList.contains('sheet') ? closeSheet() : sheet(S.tab || 'props');
-$('#mnTpl').onclick = () => sheet('tpl');
-$('#mnAdd').onclick = () => { if (!S.w) newDoc(1080, 1350, 72, '#ffffff'); $('#fileIn').click(); };
-$('#mnText').onclick = () => { if (!S.w) newDoc(1080, 1350, 72, '#ffffff'); addText(S.w / 2, S.h / 2); sheet('props'); };
-$('#mnBg').onclick = () => { const L = selLayer(); if (!L || L.kind !== 'img') { toast('Pilih gambar dahulu (ketuk gambar)', 1); return; } openBgMethod(L); };
-$('#mnTools').onclick = () => fitIfFit(() => { const o = document.body.classList.toggle('tools'); if (o) document.body.classList.remove('sheet'); mnMark(); });
-$('#mnNew').onclick = () => $('#bNew').click(); $('#mnSave').onclick = () => $('#bSave').click();
-$('#mnUndo').onclick = () => $('#bUndo').click(); $('#mnRedo').onclick = () => $('#bRedo').click(); $('#mnFit').onclick = () => fitView();
-const _st = setTool; setTool = function (t) { _st(t); document.body.classList.toggle('hasopt', ['brush', 'eraser', 'shape', 'wand', 'qsel', 'crop', 'pcrop'].includes(t)); if (isMob() && t === 'text') { /* ketuk kanvas untuk letak teks */ } };
-// tambah Halftone & lain-lain ke bar Alat pada telefon
-(function () { const t = $('#tools'), mk2 = (id, ic, tt, fn) => { const b = document.createElement('button'); b.id = id; b.className = 'mOnly'; b.title = tt; b.innerHTML = ic; b.onclick = fn; t.insertBefore(b, t.querySelector('.cols')); }; mk2('tHt', '⁘', 'Halftone DTF', () => $('#bHt').click()); mk2('tAdj', '🎚', 'Laras warna', () => $('#bAdj').click()); mk2('tEnh', '✨', 'Kualiti', () => $('#bEnh').click()); mk2('tTrim', '⌗', 'Trim', () => $('#bTrim').click()); mk2('tSh', '◐', 'Bayang', () => $('#bShadow').click()); mk2('tSize', '⤢', 'Saiz kanvas', () => $('#bSize').click()); })();
+function closeSheet(quiet) { fitIfFit(() => { document.body.classList.remove('sheet'); MS.sec = null; MS.keep = null; MS.custom = null; MS.id = ''; S.tab = 'props'; if (!quiet) { renderProps(); mbarRender(); } }); }
+$('#sheetX').onclick = () => closeSheet();
+const _rp = renderProps; renderProps = function () { _rp(); if (isMob()) mobFocus(); };
+function mobFocus() {
+  const P = $('#props'); if (S.tab !== 'props') return; if (MS.custom) { MS.custom(P); return; } if (!MS.sec) return;
+  [...P.children].forEach(c => { if (!(c.matches('details.sec') && c.dataset.sec === MS.sec)) c.style.display = 'none'; });
+  const d = P.querySelector(`details.sec[data-sec="${MS.sec}"]`); if (!d) return; d.open = true; const sb = d.querySelector('.sb');
+  if (MS.keep && sb) [...sb.children].forEach(c => { c.style.display = MS.keep.some(s => c.matches(s) || c.querySelector(s)) ? '' : 'none'; });
+  if (!d.querySelector('summary label.tg')) d.querySelector('summary').style.display = 'none';
+}
+const PAL = ['#000000', '#ffffff', '#e53935', '#ff7043', '#ffb300', '#ffe000', '#43a047', '#00c853', '#00bcd4', '#1e88e5', '#3949ab', '#8e24aa', '#d81b60', '#795548', '#9e9e9e', '#212121'];
+function colorPanel(P) {
+  const L = selLayer(); if (!L) return; const tg = MS.tg || 'main', T = L.kind === 'text' ? [['main', 'Teks'], ['sc', 'Garis tepi'], ['bg', 'Kotak']] : L.kind === 'shape' ? [['main', 'Isi'], ['stroke', 'Garis']] : [];
+  const cols = [...new Set([...PAL, ...(typeof dominantColors === 'function' ? dominantColors(6) : [])])];
+  P.innerHTML = `<div class="chips">${T.map(([k, n]) => `<button data-tg="${k}" class="${k === tg ? 'on' : ''}">${n}</button>`).join('')}</div><div class="sws" id="mcSw">${cols.map(c => `<i data-c="${c}" style="background:${c}"></i>`).join('')}<input type="color" id="mcIn" value="#ff0000"></div>` + (L.kind === 'text' ? '<div class="hint">Tip: pilih "Garis tepi" atau "Kotak" untuk tambah garis/latar pada teks.</div>' : '');
+  const apply = c => {
+    if (L.kind === 'text') { if (tg === 'main') { L.t.color = c; L.t.g2 = ''; } else if (tg === 'sc') { L.t.sc = c; if (!L.t.sw) L.t.sw = Math.max(2, Math.round(L.t.size * 0.06)); } else { L.t.bgC = c; L.t.bgOn = true; } reText(L); }
+    else if (L.kind === 'shape') { if (tg === 'main') { L.t.fill = c; L.t.g2 = ''; } else { L.t.stroke = c; if (!L.t.sw) L.t.sw = 6; } reShape(L); } redraw(); refreshLayers(); commitSoon();
+  };
+  $$('#mcSw i').forEach(i => i.onclick = () => apply(i.dataset.c)); $('#mcIn').oninput = e => apply(e.target.value); $$('[data-tg]', P).forEach(b => b.onclick = () => { MS.tg = b.dataset.tg; colorPanel(P); });
+}
+// ---- bar bawah kontekstual ----
+const A = (id, ic, t, fn, cls) => ({ id, ic, t, fn, cls });
+const SEC = (id, ic, t, title, sec, keep) => A(id, ic, t, () => openSheet(title, { sec, keep, id }));
+function ensureDoc() { if (!S.w) newDoc(1080, 1350, 72, '#ffffff'); }
+function addTxtMob() { ensureDoc(); addText(S.w / 2, S.h / 2); openSheet('Edit teks', { sec: 'ch', keep: ['#tText'], id: 'edit' }); setTimeout(() => { const ta = $('#tText'); if (ta && !IOS) { ta.focus(); ta.select(); } }, 250); }
+const done = A('done', '✓', 'Siap', () => { S.sel = null; closeSheet(true); refreshAll(); redraw(); }, 'ok');
+const lay = A('layers', '☰', 'Lapisan', () => openSheet('Lapisan', { tab: 'layers', id: 'layers' })), dup = A('dup', '⧉', 'Pendua', () => $('#lyDup').click()), del = A('del', '🗑', 'Padam', () => { $('#lyDel').click(); });
+function mbarItems() {
+  const L = selLayer();
+  if (!L) return [A('smart', '✨', 'Poster Pantas', openSmart, 'hl'), A('tpl', '▤', 'Templat', () => openSheet('Templat', { tab: 'tpl', id: 'tpl' })), A('text', 'Aa', 'Teks', addTxtMob), A('img', '🖼', 'Gambar', () => { ensureDoc(); $('#fileIn').click(); }), A('bgs', '▦', 'Latar', () => { ensureDoc(); openSheet('Latar', { tab: 'bg', id: 'bgs' }); }), A('elems', '◇', 'Elemen', () => { ensureDoc(); openSheet('Elemen', { tab: 'elems', id: 'elems' }); }), A('size', '⤢', 'Saiz', () => { if (S.w) $('#bSize').click(); }), lay, A('tools', '🛠', 'Alat', () => $('#mmTools').click())];
+  const common = [SEC('shadow', '◐', 'Bayang', 'Bayang', 'sh'), SEC('tr', '⤡', 'Ubah', 'Saiz & putar', 'tr'), SEC('pos', '⌖', 'Selari', 'Selari / posisi', 'pos'), lay, dup, del];
+  if (L.kind === 'text') return [done, A('edit', '✎', 'Edit', () => openSheet('Edit teks', { sec: 'ch', keep: ['#tText'], id: 'edit' })), SEC('font', 'Aa', 'Fon', 'Fon & saiz', 'ch', ['#tFont', '#tSize', '#tB', '#tLs', '#tLh']), A('color', '🎨', 'Warna', () => openSheet('Warna', { custom: colorPanel, id: 'color' })), SEC('style', '✨', 'Gaya', 'Gaya pantas', 'ch', ['[data-sp]', '#tGOn']), SEC('curve', '⌒', 'Lengkung', 'Teks melengkung', 'ch', ['#tCv']), SEC('outline', '◯', 'Garis', 'Garis tepi teks', 'ch', ['#tSw']), SEC('box', '▭', 'Kotak', 'Latar teks', 'tbg'), SEC('para', '¶', 'Susun', 'Perenggan', 'pa'), ...common];
+  if (L.kind === 'shape') return [done, A('color', '🎨', 'Warna', () => openSheet('Warna', { custom: colorPanel, id: 'color' })), SEC('grad', '◧', 'Gradien', 'Warna bentuk', 'col'), ...common.slice(0, 1), SEC('ol', '◯', 'Pelekat', 'Garis tepi (pelekat)', 'ol'), ...common.slice(1)];
+  return [done, A('cut', '✂', 'Buang Latar', () => openBgMethod(L), 'hl'), A('crop', '⛶', 'Potong', () => { closeSheet(true); setTool('crop'); }), A('wand', '🪄', 'Pilih', () => { closeSheet(true); setTool('wand'); }), A('adj', '🎚', 'Laras', () => $('#bAdj').click()), SEC('shadow', '◐', 'Bayang', 'Bayang', 'sh'), SEC('ol', '◯', 'Pelekat', 'Garis tepi (pelekat)', 'ol'), A('enh', '✨', 'Kualiti', () => $('#bEnh').click()), A('ht', '⁘', 'Halftone', () => htOpen(L)), SEC('op', '◔', 'Lutsinar', 'Lutsinar & adunan', 'adj'), SEC('tr', '⤡', 'Ubah', 'Saiz & putar', 'tr'), SEC('pos', '⌖', 'Selari', 'Selari / posisi', 'pos'), A('flip', '⇋', 'Balik', () => $('#lyFlipH').click()), lay, dup, del];
+}
+let lastKey = '';
+function mbarRender() {
+  if (!isMob()) return; const L = selLayer(), sh = document.body.classList.contains('sheet');
+  if (!L && sh && (MS.sec || MS.custom)) { document.body.classList.remove('sheet'); MS.sec = null; MS.custom = null; S.tab = 'props'; renderProps(); }
+  const items = mbarItems(), bar = $('#mbar'), key = (L ? L.kind + L.id : 'none') + items.map(i => i.id).join(','); const act = document.body.classList.contains('sheet') ? MS.id : (document.body.classList.contains('tools') ? 'tools' : '');
+  if (key !== lastKey) { bar.innerHTML = ''; items.forEach(it => { const b = document.createElement('button'); b.id = 'mb-' + it.id; b.dataset.id = it.id; b.className = it.cls || ''; b.innerHTML = `<i>${it.ic}</i><span>${it.t}</span>`; b.onclick = it.fn; bar.appendChild(b); }); bar.scrollLeft = 0; lastKey = key; }
+  $$('#mbar button').forEach(b => b.classList.toggle('on', b.dataset.id === act));
+}
+const _ra = refreshAll; refreshAll = function () { _ra(); mbarRender(); };
+// ---- menu ----
+$('#mtMenu').onclick = () => show('mMenu'); $('#mmClose').onclick = () => hide('mMenu');
+const mm = (id, fn) => $('#' + id).onclick = () => { hide('mMenu'); fn(); };
+mm('mmSmart', openSmart); mm('mmNew', () => $('#bNew').click()); mm('mmOpen', () => $('#fileIn').click()); mm('mmSave', () => $('#bSave').click()); mm('mmSize', () => { if (S.w) $('#bSize').click(); }); mm('mmHelp', () => show('mHelp'));
+mm('mmTools', () => { if (!S.w) return; fitIfFit(() => { document.body.classList.remove('sheet'); document.body.classList.toggle('tools'); mbarRender(); }); });
+$('#wSmart').onclick = () => { hide('welcome'); openSmart(); };
+$('#mnFit').onclick = () => fitView();
+const _st = setTool; setTool = function (t) { _st(t); document.body.classList.toggle('hasopt', ['brush', 'eraser', 'shape', 'wand', 'qsel', 'crop', 'pcrop'].includes(t)); setTimeout(() => { sizeCanvas(); redraw(); }, 30); };
+(function () { const t = $('#tools'), mk2 = (id, ic, tt, fn) => { const b = document.createElement('button'); b.id = id; b.className = 'mOnly'; b.title = tt; b.innerHTML = ic; b.onclick = fn; t.insertBefore(b, t.querySelector('.cols')); }; mk2('tHt', '⁘', 'Halftone DTF', () => $('#bHt').click()); mk2('tTrim', '⌗', 'Trim', () => $('#bTrim').click()); mk2('tClose', '✕', 'Tutup alat', () => { document.body.classList.remove('tools'); fitIfFit(() => mbarRender()); }); })();
 // ---- cubit-zum & gerak dengan 2 jari ----
-const PT = new Map(); let pinch = null;
+const PT = new Map(); let pinch = null, tapInfo = { t: 0, id: null, x: 0, y: 0 };
 function revertDrag() { if (!drag) return; if (drag.mode === 'move' && drag.L) { drag.L.x = drag.x0; drag.L.y = drag.y0; } else if (drag.mode === 'scale' && drag.L) { drag.L.sx = drag.s0.sx; drag.L.sy = drag.s0.sy; } else if (drag.mode === 'rot' && drag.L) drag.L.rot = drag.r0; drag = null; S.guides = []; }
 stage.addEventListener('pointerdown', e => {
-  if (e.pointerType !== 'touch') return; PT.set(e.pointerId, { x: e.clientX, y: e.clientY });
+  if (e.pointerType !== 'touch') return; PT.set(e.pointerId, { x: e.clientX, y: e.clientY }); tapInfo.x = e.clientX; tapInfo.y = e.clientY;
   if (PT.size === 2) { if (drag && drag.mode === 'stroke') { stroke = null; drag = null; if (S.hist[S.hi]) restore(S.hist[S.hi]); } revertDrag(); const [a, b] = [...PT.values()], r = stage.getBoundingClientRect(); pinch = { d: Math.hypot(a.x - b.x, a.y - b.y) || 1, cx: (a.x + b.x) / 2 - r.left, cy: (a.y + b.y) / 2 - r.top, z: S.z, px: S.px, py: S.py }; redraw(); }
   if (PT.size >= 2) { e.stopImmediatePropagation(); e.preventDefault(); }
 }, true);
@@ -2201,33 +2321,38 @@ stage.addEventListener('pointermove', e => {
 }, true);
 const pend = e => { PT.delete(e.pointerId); if (pinch) { e.stopImmediatePropagation(); if (PT.size < 2) pinch = null; } };
 stage.addEventListener('pointerup', pend, true); stage.addEventListener('pointercancel', pend, true);
+// ketuk 2x pada teks = edit tulisan
+stage.addEventListener('pointerup', e => {
+  if (e.pointerType !== 'touch' || !isMob() || S.tool !== 'move') return; const L = selLayer(), now = Date.now(), moved = Math.hypot(e.clientX - tapInfo.x, e.clientY - tapInfo.y) > 10; if (moved) { tapInfo.t = 0; return; }
+  if (L && L.kind === 'text' && tapInfo.id === L.id && now - tapInfo.t < 450) { openSheet('Edit teks', { sec: 'ch', keep: ['#tText'], id: 'edit' }); tapInfo.t = 0; } else { tapInfo.t = now; tapInfo.id = L ? L.id : null; }
+});
 // ---- simpan ke galeri (iOS: helaian kongsi) ----
 const _dl = download; download = function (blob, name) { if (IOS && navigator.canShare) { try { const f = new File([blob], name, { type: blob.type }); if (navigator.canShare({ files: [f] })) { navigator.share({ files: [f] }).catch(() => _dl(blob, name)); return; } } catch (_) { } } _dl(blob, name); };
 // ---- panduan ----
 const TOUR = [
-  { s: ['#mnNew', '#bNew', '#wNew'], t: 'Mulakan dengan dokumen baru', d: 'Tekan <b>Baru</b> dan pilih saiz: Story/TikTok 1080×1920, Post FB 1080×1350, atau A4 (300 dpi) untuk cetak.' },
-  { s: ['#mnTpl', '#bTpl'], t: 'Pilih templat atau latar', d: 'Templat memberi susun atur siap. Semua teks dan gambar boleh diubah. Tab <b>Latar</b> pula untuk warna/gradien.' },
-  { s: ['#mnAdd', '#bOpen'], t: 'Masukkan gambar produk', d: 'Tekan <b>Gambar</b> untuk pilih dari galeri. Seret untuk alih, cubit 2 jari untuk zum paparan.' },
-  { s: ['#mnBg', '#bBg'], t: 'Buang latar belakang', d: 'Ketuk gambar dahulu, kemudian <b>Buang Latar</b>. Pilih kaedah: Auto, AI, Tongkat, Warna atau Berus. Jika ada bahagian terpotong, guna tanda ✓ untuk kekalkan.' },
-  { s: ['#mnText', '#bText'], t: 'Tambah teks', d: 'Tekan <b>Teks</b>. Kotak teks muncul; edit tulisan, fon, warna, lengkung, garis tepi dan bayang dalam panel <b>Sifat</b>. Ketuk 2× pada teks untuk edit tulisan.' },
-  { s: ['#mnPanel', '#tabs'], t: 'Panel: Sifat, Elemen, Lapisan', d: '<b>Elemen</b> = bentuk &amp; hiasan. <b>Lapisan</b> = susun atas/bawah guna ▲▼, sembunyi 👁, kunci 🔒, pendua ⧉.' },
+  { s: ['#mtMenu', '#bNew', '#wNew'], t: 'Menu: dokumen baru & simpan', d: 'Tekan <b>☰</b> untuk Dokumen baru, Buka gambar, Simpan projek dan Saiz kanvas.' },
+  { s: ['#mb-smart', '#bSmart'], t: '✨ Poster Pantas — cara paling laju', d: 'Pilih format (IG/FB/TikTok), tema warna, isi tajuk &amp; harga, pilih foto produk. Poster siap dalam beberapa saat. Tekan <b>🔀 Rawak</b> untuk variasi lain.' },
+  { s: ['#mb-tpl', '#bTpl'], t: 'Templat & Latar', d: 'Templat memberi susun atur siap. <b>Latar</b> untuk warna atau gradien.' },
+  { s: ['#mb-img', '#bOpen'], t: 'Masukkan gambar', d: 'Tekan <b>Gambar</b>. Seret untuk alih, cubit 2 jari untuk zum. <b>Ketuk gambar</b> — bar bawah bertukar kepada alat gambar: Buang Latar, Bayang, Pelekat dan lain-lain.' },
+  { s: ['#mb-text', '#bText'], t: 'Tambah teks', d: 'Tekan <b>Teks</b>. Bar bawah bertukar: <b>Edit</b>, <b>Fon</b>, <b>Warna</b>, <b>Gaya</b>, <b>Lengkung</b>, <b>Bayang</b>. Ketuk 2× pada teks untuk edit tulisan.' },
+  { s: ['#mbar'], t: 'Bar bawah berubah ikut pilihan', d: 'Pilih teks, gambar atau bentuk — butang di bawah ikut berubah. Tekan <b>✓ Siap</b> untuk kembali. Geser bar ke kiri/kanan untuk lihat semua.' },
+  { s: ['#mb-layers', '#tabs'], t: 'Lapisan', d: '<b>Lapisan</b>: susun atas/bawah guna ▲▼, sembunyi 👁, kunci 🔒.' },
   { s: ['#bExport'], t: 'Muat turun', d: 'Pilih PNG (jelas) atau JPG (ringan untuk FB/TikTok). Untuk DTF: guna <b>Halftone</b> dahulu, kemudian eksport PNG lutsinar.' },
 ];
 let TI = -1;
 function vis(sel) { for (const s of sel) { const e = $(s); if (e && e.offsetParent !== null) { const r = e.getBoundingClientRect(); if (r.width > 0 && r.height > 0) return e; } } return null; }
 function tourShow(i) {
   TI = i; if (i < 0 || i >= TOUR.length) { $('#coach').classList.remove('show'); TI = -1; try { localStorage.setItem('pe2d_tour', '1'); } catch (_) { } return; }
-  const st = TOUR[i]; if (isMob() && (st.s[0] === '#mnPanel')) { } const e = vis(st.s), h = $('#coachHole'), c = $('#coachCard'); $('#coach').classList.add('show');
+  const st = TOUR[i], e = vis(st.s), h = $('#coachHole'), c = $('#coachCard'); $('#coach').classList.add('show');
   $('#coachN').textContent = `Langkah ${i + 1} / ${TOUR.length}`; $('#coachT').textContent = st.t; $('#coachD').innerHTML = st.d; $('#coachNext').textContent = i === TOUR.length - 1 ? 'Siap ✓' : 'Seterusnya ›'; $('#coachPrev').style.visibility = i ? '' : 'hidden';
   if (e) { const r = e.getBoundingClientRect(); Object.assign(h.style, { display: 'block', left: r.left - 4 + 'px', top: r.top - 4 + 'px', width: r.width + 8 + 'px', height: r.height + 8 + 'px' }); const below = r.top < innerHeight / 2; c.style.top = below ? Math.min(innerHeight - c.offsetHeight - 8, r.bottom + 14) + 'px' : 'auto'; c.style.bottom = below ? 'auto' : Math.max(8, innerHeight - r.top + 14) + 'px'; }
   else { h.style.display = 'none'; c.style.top = '30%'; c.style.bottom = 'auto'; }
 }
 function startTour() { hide('mHelp'); hide('welcome'); if (!S.w) newDoc(1080, 1350, 72, '#ffffff'); if (isMob()) closeSheet(); tourShow(0); }
 $('#coachNext').onclick = () => tourShow(TI + 1); $('#coachPrev').onclick = () => tourShow(TI - 1); $('#coachSkip').onclick = () => tourShow(-1);
-$('#bHelp').onclick = $('#mnHelp').onclick = () => show('mHelp'); $('#wHelp').onclick = () => { hide('welcome'); show('mHelp'); };
+$('#bHelp').onclick = () => show('mHelp'); $('#wHelp').onclick = () => { hide('welcome'); show('mHelp'); };
 $('#hClose').onclick = () => hide('mHelp'); $('#hTour').onclick = startTour;
 applyMob();
-try { if (!localStorage.getItem('pe2d_tour')) { $('#wHelp').classList.add('pri'); } } catch (_) { }
 
 setTool('move'); undoBtns(); sizeCanvas();
 FONTS.forEach(() => 0);
